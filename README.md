@@ -2,8 +2,8 @@
 
 ---
 title: Projet CS351 (2022-2023): Émulateur MIPS
-author: [COMPLÉTER ICI]
-date: [COMPLÉTER ICI]
+author: Robin Lafage, Gabin Chognot
+date: 18/10/2022
 ---
 
 ## Rendu 1
