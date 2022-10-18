@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "header.h"
 
 #define INTERACTIF 0
 #define PAS_A_PAS 1
@@ -16,12 +17,15 @@ int main(int argc, char **argv)
 
    if (argc==1) {
       mode = INTERACTIF;
+      interactif();
    } 
    else if (argc==3) {
       mode = PAS_A_PAS;
+      pas_a_pas();
    }
    else if (argc==4) {
       mode = AUTOMATIQUE;
+      automatique(argv[1], argv[2], argv[3]);
    }
 
 

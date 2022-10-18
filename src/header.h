@@ -1,2 +1,3 @@
 void pas_a_pas();
-void automatique();
+void automatique(char*, char*, char*);
+void interactif();
