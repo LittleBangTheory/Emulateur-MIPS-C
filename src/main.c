@@ -1,12 +1,30 @@
 // Projet MIPS 2022-2023
-// Auteurs: Nom1_Nom2
-//test
-//CACA
+// Auteurs: Lafage_Chognot
 
 #include <stdio.h>
+#include <stdlib.h>
+
+#define INTERACTIF 0
+#define PAS_A_PAS 1
+#define AUTOMATIQUE 2
+
 
 int main(int argc, char **argv)
 {
+
+   int mode;
+
+   if (argc==1) {
+      mode = INTERACTIF;
+   } 
+   else if (argc==3) {
+      mode = PAS_A_PAS;
+   }
+   else if (argc==4) {
+      mode = AUTOMATIQUE;
+   }
+
+
     /* S'il n'y a pas d'arguments (argc==1), lancer le mode interactif. */
 
     /* S'il y a 2 arguments (argc==3), lancer le mode automatique pas-à-pas.

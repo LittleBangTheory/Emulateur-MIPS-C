@@ -1,5 +1,5 @@
 # INDIQUEZ ICI: Votre nom et celui de votre binôme
-AUTEURS := Nom1_Nom2
+AUTEURS := Lafage_Chognot
 
 MAIN := emul-mips
 SRC_C := $(wildcard src/*.c)
@@ -36,7 +36,7 @@ clean:
 # Tapez "make tests" pour lancer les tests.
 
 tests: $(MAIN)
-	@ python test.py -v
+	@ python3 test.py -v
 
 # Tapez "make tar" pour faire une archive du dossier avant chaque rendu.
 
