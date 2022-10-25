@@ -5,6 +5,9 @@
 void automatique(char* file_programme, char* file_sortie_assemblage, char* file_sortie_execution) {
     printf("Mode automatique\n");
 
+    char instruction[TAILLE_MAX];
+    char instruction_hexa[TAILLE_MAX];
+
     FILE* programme;
     FILE* sortie_assemblage;
     FILE* sortie_execution;
@@ -18,6 +21,11 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
         exit(EXIT_FAILURE);
     }
 
+    //Lecture du fichier
+    fgets(instruction, TAILLE_MAX, programme);
+    printf("%s\n", instruction);
+    convert_hexa(instruction, instruction_hexa);
+    printf("%s\n", instruction_hexa);
     
     fclose(programme);
     fclose(sortie_assemblage);

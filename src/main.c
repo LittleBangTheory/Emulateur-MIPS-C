@@ -28,6 +28,8 @@ int main(int argc, char **argv)
       automatique(argv[1], argv[2], argv[3]);
    }
 
+   printf("mode : %d\n", mode);
+
 
     /* S'il n'y a pas d'arguments (argc==1), lancer le mode interactif. */
 
@@ -57,7 +59,6 @@ int main(int argc, char **argv)
 
     /* Supprimez ces commentaires une fois que c'est fait. */
 
-    printf("Hello émulateur MIPS!\n");
 
     return 0;
 }
