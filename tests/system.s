@@ -1,0 +1,13 @@
+/*
+J
+JAL 
+JR 
+NOP
+LUI
+LW 
+ROTR
+SLL
+SRL
+SW
+SYSCALL
+*/

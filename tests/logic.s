@@ -1,0 +1,25 @@
+/*
+ADDI $2, $0, 5
+AND $3, $2, $0
+BEQ 
+BGTZ
+BLEZ
+BNE
+OR
+XOR
+SLT
+*/
+
+# EXPECTED_ASSEMBLY
+# 20020005
+# 401824
+# 
+#
+#
+
+# EXPECTED_FINAL_STATE
+# $02: 5
+# $03: 0
+# 
+#
+#
