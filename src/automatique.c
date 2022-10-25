@@ -5,6 +5,8 @@
 void automatique(char* file_programme, char* file_sortie_assemblage, char* file_sortie_execution) {
     printf("Mode automatique\n");
 
+    char currentChar;
+
     FILE* programme;
     FILE* sortie_assemblage;
     FILE* sortie_execution;
@@ -16,6 +18,12 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
     if (programme==NULL || sortie_assemblage==NULL || sortie_execution==NULL) {
         printf("Impossible d'ouvrir le fichier\n");
         exit(EXIT_FAILURE);
+    }
+
+    //Lecture du fichier
+
+    while (currentChar = fgetc(programme) != EOF) {
+        
     }
 
     
