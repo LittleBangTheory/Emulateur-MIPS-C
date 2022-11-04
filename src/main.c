@@ -28,8 +28,7 @@ int main(int argc, char **argv)
       automatique(argv[1], argv[2], argv[3]);
    }
 
-   printf("mode : %d\n", mode);
-
+   //printf("%d\n", mode);
 
     /* S'il n'y a pas d'arguments (argc==1), lancer le mode interactif. */
 
