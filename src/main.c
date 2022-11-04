@@ -13,18 +13,18 @@
 int main(int argc, char **argv)
 {
 
-   int mode;
+   //int mode;
 
    if (argc==1) {
-      mode = INTERACTIF;
+      //mode = INTERACTIF;
       interactif();
    } 
    else if (argc==3) {
-      mode = PAS_A_PAS;
+      //mode = PAS_A_PAS;
       pas_a_pas();
    }
    else if (argc==4) {
-      mode = AUTOMATIQUE;
+      //mode = AUTOMATIQUE;
       automatique(argv[1], argv[2], argv[3]);
    }
 

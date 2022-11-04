@@ -12,3 +12,6 @@ void interactif();
 
 void convert_hexa(char*, char*);
 int getType(char*);
+void getOpCode(char*, char*);
+void convert_binaire(int, int, char*);
+void encoder(char*, char*);
