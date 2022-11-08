@@ -5,6 +5,10 @@
 #define TYPE_I 0
 #define TYPE_J 1
 #define TYPE_R 2
+#define RT 1
+#define RS 2
+#define IMMEDIATE 3
+#define RD 4
 
 void pas_a_pas();
 void automatique(char*, char*, char*);
@@ -14,4 +18,5 @@ void convert_hexa(char*, char*);
 int getType(char*);
 void getOpCode(char*, char*);
 void convert_binaire(int, int, char*);
+int getIArgs(char*, int);
 void encoder(char*, char*);

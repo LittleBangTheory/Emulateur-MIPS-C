@@ -1,15 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "header.h"
 
 void convert_hexa(char* instruction, char* instruction_hexa) {
-    instruction[0] = 'a'; //ANTIWARNING
 
     //int type = getType(instruction);
 
     //Juste pour teser convert_binaire, a supprimer
-    convert_binaire(5,3,instruction_hexa);
+    //convert_binaire(0,5,instruction_hexa);
+    //printf("%s\n", instruction_hexa);
+    //printf("%d\n", getIArgs(instruction, IMMEDIATE));
+
+    encoder(instruction, instruction_hexa);
     printf("%s\n", instruction_hexa);
 
     /*
@@ -131,15 +135,60 @@ void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
 
 
 void encoder(char* instruction, char* instruction_encodee) {
-    instruction_encodee[0] = 2; //ANTIWARNING
 
     char opcode[7];
     int type;
+
+    char rt[6], rs[6], imm[17];
     
     getOpCode(instruction, opcode);
     type = getType(instruction);
 
     if (type == TYPE_I) {
+        convert_binaire(getIArgs(instruction, RT), 5, rt);
+        convert_binaire(getIArgs(instruction, RS), 5, rs);
+        convert_binaire(getIArgs(instruction, IMMEDIATE), 16, imm);
+        rt[5] = '\0';
+        rs[5] = '\0';
+        imm[16] = '\0';
+
+        strcat(instruction_encodee, opcode);
+        strcat(instruction_encodee, rs);
+        strcat(instruction_encodee, rt);
+        strcat(instruction_encodee, imm);
 
     }
+}
+
+
+int getIArgs(char* instruction, int arg) {
+
+    int i=0, res=0, tmp;
+    switch (arg) {
+        case RT: tmp = -1; break;
+        case RS: tmp = -2; break;
+        case IMMEDIATE: tmp = -3; break;
+        default: tmp = 0;
+    }
+
+    while (instruction[i]!='\0' && tmp<0) {
+        if (instruction[i]=='$' && instruction[i+2]==',') {
+            res = instruction[i+1] - '0';
+            tmp++;
+        } else if (instruction[i]=='$' && instruction[i+2]!=',') {
+            res = (10*(instruction[i+1]-'0')) + (instruction[i+2]-'0');
+            tmp++;
+        } else if (instruction[i]==' ' && tmp==-1 && arg==IMMEDIATE) {
+            res = 0;
+            for (int j=i+2; instruction[j]!='\0'; j++) {
+                res += (instruction[j-1] - '0');
+                res *= 10;
+            }
+            res /= 10;
+            tmp++;
+        }
+        i++;
+    }
+
+    return res;
 }
