@@ -21,17 +21,14 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
         exit(EXIT_FAILURE);
     }
 
-    /*
+
+    ///*
     //Lecture du fichier
-    while (fgets(instruction, TAILLE_MAX, programme)[0] != '#') {
+    while (fgets(instruction, TAILLE_MAX, programme)[0] != '#') {     
         convert_hexa(instruction, instruction_hexa);
         fprintf(sortie_assemblage, "%s\n", instruction_hexa);
     }
-    */
-    fgets(instruction, TAILLE_MAX, programme);
-    printf("%s\n", instruction);
-    convert_hexa(instruction, instruction_hexa);
-
+    //*/
 
     fclose(programme);
     fclose(sortie_assemblage);

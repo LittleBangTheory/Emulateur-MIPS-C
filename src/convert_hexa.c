@@ -2,27 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "header.h"
 
 void convert_hexa(char* instruction, char* instruction_hexa) {
 
-    //int type = getType(instruction);
+    int i=0, dec_val=0;
+    char instruction_encodee[500];
 
-    //Juste pour teser convert_binaire, a supprimer
-    //convert_binaire(0,5,instruction_hexa);
-    //printf("%s\n", instruction_hexa);
-    //printf("%d\n", getIArgs(instruction, IMMEDIATE));
+    encoder(instruction, instruction_encodee);
 
-    encoder(instruction, instruction_hexa);
-    printf("%s\n", instruction_hexa);
-
-    /*
-    int j=0;
-    for (int i=0; instruction[i] != '\n'; i++) {
-        sprintf((char*)(instruction_hexa+j), "%02X", instruction[i]);
-        j+=2;
+    for (i=0; instruction_encodee[i] != '\0'; i++);
+    
+    for (int j=i-1; j>=0; j--) {
+        dec_val += (instruction_encodee[j] - '0')*pow(2, i-j-1);
     }
-    */
+    sprintf(instruction_hexa, "%x\n", dec_val);
 }
 
 
@@ -140,6 +135,8 @@ void encoder(char* instruction, char* instruction_encodee) {
     int type;
 
     char rt[6], rs[6], imm[17];
+
+    char target[27];
     
     getOpCode(instruction, opcode);
     type = getType(instruction);
@@ -152,11 +149,19 @@ void encoder(char* instruction, char* instruction_encodee) {
         rs[5] = '\0';
         imm[16] = '\0';
 
-        strcat(instruction_encodee, opcode);
+        strcpy(instruction_encodee, opcode);
         strcat(instruction_encodee, rs);
         strcat(instruction_encodee, rt);
         strcat(instruction_encodee, imm);
 
+    }
+
+
+    if (type == TYPE_J) {
+        convert_binaire(getJArgs(instruction), 26, target);
+        target[26] = '\0';
+        strcpy(instruction_encodee, opcode);
+        strcat(instruction_encodee, target);
     }
 }
 
@@ -171,11 +176,18 @@ int getIArgs(char* instruction, int arg) {
         default: tmp = 0;
     }
 
+
+    // Si on veut RT, alors on prend la valeur apres le 1er #
+    // Si on veut RS, alors on prend la valeur apres le 2eme #
+    // Si in veut IMMEDIATE, on prend la dernière valeur
+
     while (instruction[i]!='\0' && tmp<0) {
         if (instruction[i]=='$' && instruction[i+2]==',') {
-            res = instruction[i+1] - '0';
+            //Cas ou la valeur est inférieure a 10
+            res = instruction[i+1] - '0'; //Convertit instruction[i+1] en int
             tmp++;
         } else if (instruction[i]=='$' && instruction[i+2]!=',') {
+            //Cas ou la valeur est supérieure a 10
             res = (10*(instruction[i+1]-'0')) + (instruction[i+2]-'0');
             tmp++;
         } else if (instruction[i]==' ' && tmp==-1 && arg==IMMEDIATE) {
@@ -189,6 +201,24 @@ int getIArgs(char* instruction, int arg) {
         }
         i++;
     }
+
+    return res;
+}
+
+int getJArgs(char* instruction) {
+
+    int target=0, res=0;
+
+    for (int i=0; instruction[i] != '\0'; i++) {
+        if (instruction[i-1]==' ') {
+            target = 1;
+        }
+        else if (target==1) {
+            res += (instruction[i-1] - '0');
+            res *= 10;
+        }
+    }
+    res /= 10;
 
     return res;
 }

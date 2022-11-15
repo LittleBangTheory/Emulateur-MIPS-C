@@ -19,4 +19,5 @@ int getType(char*);
 void getOpCode(char*, char*);
 void convert_binaire(int, int, char*);
 int getIArgs(char*, int);
+int getJArgs(char*);
 void encoder(char*, char*);
