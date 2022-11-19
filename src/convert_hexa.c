@@ -5,6 +5,11 @@
 #include <math.h>
 #include "header.h"
 
+/*
+La partie typeR de encoder marche pas
+Vérifier getRArgs
+*/
+
 void convert_hexa(char* instruction, char* instruction_hexa) {
 
     int i=0, dec_val=0;
@@ -131,10 +136,16 @@ void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
 
 void encoder(char* instruction, char* instruction_encodee) {
 
+    char commande[TAILLE_MAX];
+    char* typeR_SA[NB_TYPE_R_SA] = {"ROTR", "SLL", "SRL"};
+    char* typeR_ARG1[NB_TYPE_R_ARG1] = {"JR", "MFHI", "MFLO"};
+    char* typeR_ARG2[NB_TYPE_R_ARG2] = {"DIV", "MULT"};
+    int typeR = ARG3;
+
     char opcode[7];
     int type;
 
-    char rt[6], rs[6], imm[17];
+    char rt[6], rs[6], imm[17], rd[6], sa[6];
 
     char target[27];
     
@@ -154,14 +165,102 @@ void encoder(char* instruction, char* instruction_encodee) {
         strcat(instruction_encodee, rt);
         strcat(instruction_encodee, imm);
 
-    }
-
-
-    if (type == TYPE_J) {
+    } else if (type == TYPE_J) {
         convert_binaire(getJArgs(instruction), 26, target);
         target[26] = '\0';
         strcpy(instruction_encodee, opcode);
         strcat(instruction_encodee, target);
+    } else if (type == TYPE_R) {
+        
+        int i = 0;
+        for (i=0; instruction[i] != ' '; i++) {
+            commande[i] = instruction[i];
+        }
+        commande[i] = '\0';
+
+        for (i=0; i < NB_TYPE_R_SA; i++) {
+            if (strcmp(commande, typeR_SA[i]) == 0) {
+                typeR = ARGSA;
+            }
+        }
+
+        for (i=0; i < NB_TYPE_R_ARG1; i++) {
+            if (strcmp(commande, typeR_ARG1[i]) == 0) {
+                typeR = ARG1;
+            }
+        }
+
+        for (i=0; i < NB_TYPE_R_ARG2; i++) {
+            if (strcmp(commande, typeR_ARG2[i]) == 0) {
+                typeR = ARG2;
+            }
+        }
+
+
+        if (typeR == ARGSA) {
+            convert_binaire(getRArgs(instruction, RD), 5, rd);
+            convert_binaire(getRArgs(instruction, RT), 5, rt);
+            convert_binaire(getRArgs(instruction, SA), 5, sa);
+            rd[5] = '\0';
+            rt[5] = '\0';
+            sa[5] = '\0';
+
+            if (strcmp(commande, "SLL") == 0) {
+                strcpy(instruction_encodee, "00000000000");
+                strcat(instruction_encodee, rt);
+                strcat(instruction_encodee, rd);
+                strcat(instruction_encodee, sa);
+                strcpy(instruction_encodee, opcode);
+            } else {
+                strcpy(instruction_encodee, "00000000001");
+                strcat(instruction_encodee, rt);
+                strcat(instruction_encodee, rd);
+                strcat(instruction_encodee, sa);
+                strcpy(instruction_encodee, opcode);
+            }
+        } else if (typeR == ARG3) {
+            convert_binaire(getRArgs(instruction, RD), 5, rd);
+            convert_binaire(getRArgs(instruction, RT), 5, rt);
+            convert_binaire(getRArgs(instruction, SA), 5, rs);
+            rd[5] = '\0';
+            rt[5] = '\0';
+            rs[5] = '\0';
+
+            strcpy(instruction_encodee, "000000");
+            strcat(instruction_encodee, rs);
+            strcat(instruction_encodee, rt);
+            strcat(instruction_encodee, rd);
+            strcat(instruction_encodee, "00000");
+            strcpy(instruction_encodee, opcode);
+        } else if (typeR == ARG2) {
+            convert_binaire(getRArgs(instruction, RD), 5, rs);
+            convert_binaire(getRArgs(instruction, RS), 5, rt);
+            rt[5] = '\0';
+            rs[5] = '\0';
+
+            strcpy(instruction_encodee, "000000");
+            strcat(instruction_encodee, rs);
+            strcat(instruction_encodee, rt);
+            strcat(instruction_encodee, "0000000000");
+            strcpy(instruction_encodee, opcode);
+        } else if (typeR == ARG1) {
+            convert_binaire(getRArgs(instruction, RD), 5, rd);
+            rd[5] = '\0';
+
+            if (strcmp(commande, "JR") == 0) {
+                strcpy(instruction_encodee, "000000");
+                strcat(instruction_encodee, rd);
+                strcat(instruction_encodee, "000000000000000");
+                strcpy(instruction_encodee, opcode);
+            } else {
+                strcpy(instruction_encodee, "0000000000000000");
+                strcat(instruction_encodee, rd);
+                strcat(instruction_encodee, "00000");
+                strcpy(instruction_encodee, opcode);
+            }
+        }
+
+
     }
 }
 
@@ -179,7 +278,7 @@ int getIArgs(char* instruction, int arg) {
 
     // Si on veut RT, alors on prend la valeur apres le 1er #
     // Si on veut RS, alors on prend la valeur apres le 2eme #
-    // Si in veut IMMEDIATE, on prend la dernière valeur
+    // Si on veut IMMEDIATE, on prend la dernière valeur
 
     while (instruction[i]!='\0' && tmp<0) {
         if (instruction[i]=='$' && instruction[i+2]==',') {
@@ -205,6 +304,7 @@ int getIArgs(char* instruction, int arg) {
     return res;
 }
 
+
 int getJArgs(char* instruction) {
 
     int target=0, res=0;
@@ -219,6 +319,46 @@ int getJArgs(char* instruction) {
         }
     }
     res /= 10;
+
+    return res;
+}
+
+
+int getRArgs(char* instruction, int arg) {
+    int i=0, res=0, tmp;
+    switch (arg) {
+        case RD: tmp = -1; break;
+        case RS: tmp = -2; break;
+        case RT: tmp = -3; break;
+        case SA: tmp = -3; break;
+        default: tmp = 0;
+    }
+
+
+    // Si on veut RD, alors on prend la valeur apres le 1er #
+    // Si on veut RS, alors on prend la valeur apres le 2eme #
+    // Si on veut RT, on prend la valeur apres le 3eme #
+
+    while (instruction[i]!='\0' && tmp<0) {
+        if (instruction[i]=='$' && instruction[i+2]==',') {
+            //Cas ou la valeur est inférieure a 10
+            res = instruction[i+1] - '0'; //Convertit instruction[i+1] en int
+            tmp++;
+        } else if (instruction[i]=='$' && instruction[i+2]!=',') {
+            //Cas ou la valeur est supérieure a 10
+            res = (10*(instruction[i+1]-'0')) + (instruction[i+2]-'0');
+            tmp++;
+        } else if (instruction[i]==' ' && tmp==-1 && arg==SA) {
+            res = 0;
+            for (int j=i+2; instruction[j]!='\0'; j++) {
+                res += (instruction[j-1] - '0');
+                res *= 10;
+            }
+            res /= 10;
+            tmp++;
+        }
+        i++;
+    }
 
     return res;
 }
