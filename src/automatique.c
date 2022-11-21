@@ -22,13 +22,12 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
     }
 
 
-    ///*
     //Lecture du fichier
     while (fgets(instruction, TAILLE_MAX, programme)[0] != '#') {     
         convert_hexa(instruction, instruction_hexa);
         fprintf(sortie_assemblage, "%s\n", instruction_hexa);
     }
-    //*/
+
 
     fclose(programme);
     fclose(sortie_assemblage);

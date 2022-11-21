@@ -5,11 +5,6 @@
 #include <math.h>
 #include "header.h"
 
-/*
-La partie typeR de encoder marche pas
-Vérifier getRArgs
-*/
-
 void convert_hexa(char* instruction, char* instruction_hexa) {
 
     int i=0, dec_val=0;
@@ -84,7 +79,7 @@ void getOpCode(char* instruction, char* opcode) {
     else if (!strcmp(commande, "SLL")) sprintf(opcode, "%s", "000000");
     else if (!strcmp(commande, "SRL")) sprintf(opcode, "%s", "000010");
     else if (!strcmp(commande, "SLT")) sprintf(opcode, "%s", "101010");
-    else if (!strcmp(commande, "SUB")) sprintf(opcode, "%s", "1000010");
+    else if (!strcmp(commande, "SUB")) sprintf(opcode, "%s", "100010");
     else if (!strcmp(commande, "ADDI")) sprintf(opcode, "%s", "001000");
     else if (!strcmp(commande, "BEQ")) sprintf(opcode, "%s", "000100");
     else if (!strcmp(commande, "BLEZ")) sprintf(opcode, "%s", "000110");
@@ -170,6 +165,7 @@ void encoder(char* instruction, char* instruction_encodee) {
         target[26] = '\0';
         strcpy(instruction_encodee, opcode);
         strcat(instruction_encodee, target);
+        
     } else if (type == TYPE_R) {
         
         int i = 0;
@@ -210,18 +206,18 @@ void encoder(char* instruction, char* instruction_encodee) {
                 strcat(instruction_encodee, rt);
                 strcat(instruction_encodee, rd);
                 strcat(instruction_encodee, sa);
-                strcpy(instruction_encodee, opcode);
+                strcat(instruction_encodee, opcode);
             } else {
                 strcpy(instruction_encodee, "00000000001");
                 strcat(instruction_encodee, rt);
                 strcat(instruction_encodee, rd);
                 strcat(instruction_encodee, sa);
-                strcpy(instruction_encodee, opcode);
+                strcat(instruction_encodee, opcode);
             }
         } else if (typeR == ARG3) {
             convert_binaire(getRArgs(instruction, RD), 5, rd);
             convert_binaire(getRArgs(instruction, RT), 5, rt);
-            convert_binaire(getRArgs(instruction, SA), 5, rs);
+            convert_binaire(getRArgs(instruction, RS), 5, rs);
             rd[5] = '\0';
             rt[5] = '\0';
             rs[5] = '\0';
@@ -231,7 +227,7 @@ void encoder(char* instruction, char* instruction_encodee) {
             strcat(instruction_encodee, rt);
             strcat(instruction_encodee, rd);
             strcat(instruction_encodee, "00000");
-            strcpy(instruction_encodee, opcode);
+            strcat(instruction_encodee, opcode);
         } else if (typeR == ARG2) {
             convert_binaire(getRArgs(instruction, RD), 5, rs);
             convert_binaire(getRArgs(instruction, RS), 5, rt);
@@ -242,7 +238,7 @@ void encoder(char* instruction, char* instruction_encodee) {
             strcat(instruction_encodee, rs);
             strcat(instruction_encodee, rt);
             strcat(instruction_encodee, "0000000000");
-            strcpy(instruction_encodee, opcode);
+            strcat(instruction_encodee, opcode);
         } else if (typeR == ARG1) {
             convert_binaire(getRArgs(instruction, RD), 5, rd);
             rd[5] = '\0';
@@ -251,12 +247,12 @@ void encoder(char* instruction, char* instruction_encodee) {
                 strcpy(instruction_encodee, "000000");
                 strcat(instruction_encodee, rd);
                 strcat(instruction_encodee, "000000000000000");
-                strcpy(instruction_encodee, opcode);
+                strcat(instruction_encodee, opcode);
             } else {
                 strcpy(instruction_encodee, "0000000000000000");
                 strcat(instruction_encodee, rd);
                 strcat(instruction_encodee, "00000");
-                strcpy(instruction_encodee, opcode);
+                strcat(instruction_encodee, opcode);
             }
         }
 
@@ -340,7 +336,7 @@ int getRArgs(char* instruction, int arg) {
     // Si on veut RT, on prend la valeur apres le 3eme #
 
     while (instruction[i]!='\0' && tmp<0) {
-        if (instruction[i]=='$' && instruction[i+2]==',') {
+        if (instruction[i]=='$' && (instruction[i+2]==',' || instruction[i+2]<48 || instruction[i+2]>57)) {
             //Cas ou la valeur est inférieure a 10
             res = instruction[i+1] - '0'; //Convertit instruction[i+1] en int
             tmp++;
