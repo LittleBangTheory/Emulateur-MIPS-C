@@ -7,7 +7,7 @@
 
 void convert_hexa(char* instruction, char* instruction_hexa) {
 
-    int i=0, dec_val=0, taille_instruction_encodee;
+    int dec_val=0, taille_instruction_encodee;
     char instruction_encodee[500];
 
     encoder(instruction, instruction_encodee);
