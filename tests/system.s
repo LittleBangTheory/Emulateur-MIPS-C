@@ -1,13 +1,25 @@
-/*
 J
 JAL 
 JR 
 NOP
 LUI
 LW 
-ROTR
+ROTR 
 SLL
 SRL
 SW
 SYSCALL
-*/
+
+# EXPECTED_ASSEMBLY
+# 
+# 
+# 
+#
+#
+
+# EXPECTED_FINAL_STATE
+# 
+# 
+# 
+#
+#
