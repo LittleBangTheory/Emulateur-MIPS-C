@@ -1,9 +1,12 @@
 /*
-ADDI $2, $0, 5
+ADDI $2, $0, 3
+ADDI $4, $0, 1
 AND $3, $2, $0
-BEQ 
-BGTZ
-BLEZ
+ADDI $4, $4, 1
+BEQ $2, $4, -1
+ADDI $2, $2, -1
+BGTZ $2, -1
+BLEZ 
 BNE
 OR
 XOR
