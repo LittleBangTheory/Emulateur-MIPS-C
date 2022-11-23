@@ -7,19 +7,21 @@
 
 void convert_hexa(char* instruction, char* instruction_hexa) {
 
-    int i=0, dec_val=0;
+    int dec_val=0, taille_instruction_encodee;
     char instruction_encodee[500];
 
     encoder(instruction, instruction_encodee);
 
-    for (i=0; instruction_encodee[i] != '\0'; i++);
+    //Trouver la taille de la chaine
+    taille_instruction_encodee = strlen(instruction_encodee);
     
-    for (int j=i-1; j>=0; j--) {
-        dec_val += (instruction_encodee[j] - '0')*pow(2, i-j-1);
+    //Convertir le binaire en hexa
+    for (int j=taille_instruction_encodee-1; j>=0; j--) {
+        dec_val += (instruction_encodee[j] - '0')*pow(2, taille_instruction_encodee-j-1);
     }
-    sprintf(instruction_hexa, "%x\n", dec_val);
+    sprintf(instruction_hexa, "%.8x\n", dec_val);
+    
 }
-
 
 int getType(char* instruction) {
     int type;
@@ -123,9 +125,6 @@ void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
         sprintf((char*)(valeur_binaire+k), "%d", binaryNum[j]);
         k++;
     }
-
-    
-
 }
 
 
