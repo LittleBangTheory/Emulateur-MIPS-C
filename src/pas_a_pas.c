@@ -18,13 +18,11 @@ void pas_a_pas(char* file_programme) {
         exit(EXIT_FAILURE);
     }
 
-    char a[5];
     //Lecture du fichier
     while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {   
         printf("%s", instruction);
         convert_hexa(instruction, instruction_hexa);
-        convert_binaire(-5, 3, a);
-        printf("%s\n", a);
+        printf("%s\n", instruction_hexa);
         printf("Press enter to continue");
         enter = scanf("%c", &enter);
     }

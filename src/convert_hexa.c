@@ -11,6 +11,7 @@ void convert_hexa(char* instruction, char* instruction_hexa) {
     int dec_val=0, taille_instruction_encodee;
     char instruction_encodee[500];
 
+
     encoder(instruction, instruction_encodee);
 
     //Trouver la taille de la chaine
@@ -103,8 +104,14 @@ void getOpCode(char* instruction, char* opcode) {
 void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
 
     int binaryNum[32];
-    int i=0, k=0;
+    int i=0, k=0, negatif=0, invert=0;
     int nb_zeros=0;
+
+    //Si la valeur est negative, on change son signe et on met la variable negatif a 1
+    if (valeur<0) {
+        negatif = 1;
+        valeur *= -1;
+    }
    
     for ( ;valeur > 0; ){
         binaryNum[i++] = valeur % 2;
@@ -125,6 +132,21 @@ void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
     for (int j=i-1; j>=0; j--) {
         sprintf((char*)(valeur_binaire+k), "%d", binaryNum[j]);
         k++;
+    }
+
+    //Si la valeur est negative, on le code en complément a 2
+    if (negatif==1) {
+        for (int j=strlen(valeur_binaire)-1; j>=0; j--) {
+            if (valeur_binaire[j] == '0' && invert == 1) {
+                valeur_binaire[j] = '1';
+            } else if (valeur_binaire[j] == '1' && invert == 1) {
+                valeur_binaire[j] = '0';
+            }
+
+            if (valeur_binaire[j] == '1') {
+                invert = 1;
+            }
+        }
     }
 }
 
@@ -306,7 +328,8 @@ int getIArgs(char* instruction, int arg) {
         i++;
     }
 
-    if (((arg==RT || arg==RS) && (res>31 || res<0)) || (arg==SA && res>65535)) {
+    //Opérandes non valides
+    if (((arg==RT || arg==RS) && (res>31 || res<0)) || (arg==IMMEDIATE && res>65535)) {
         printf("Valeur des opérandes non valide\n");
         exit(EXIT_FAILURE);
     }
@@ -329,6 +352,12 @@ int getJArgs(char* instruction) {
         }
     }
     res /= 10;
+
+    //Opérandes non valides
+    if (res > 67108863) {
+        printf("Valeur des opérandes non valide\n");
+        exit(EXIT_FAILURE);
+    }
 
     return res;
 }
@@ -368,6 +397,12 @@ int getRArgs(char* instruction, int arg) {
             tmp++;
         }
         i++;
+    }
+
+    //Opérandes non valides
+    if (res>31 || res<0) {
+        printf("Valeur des opérandes non valide\n");
+        exit(EXIT_FAILURE);
     }
 
     return res;
