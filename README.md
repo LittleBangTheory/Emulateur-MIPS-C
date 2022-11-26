@@ -23,12 +23,11 @@ date: 18/10/2022
 des opérandes entières) ?
 
 Nous avons fait le choix de lire le fichier d'entrée ligne par ligne, puis d'écrire des fonctions qui permettent de récupérer les informations contenues dans l'instrucion c'est à dire le type de l'instruction, l'opcode, et les opérandes entières.
-Pour le type, nous avons implémenté 3 tableaux, chacun contenant la liste des instructions du même type, puis après lecture du premier mot de la ligne (c'est à dire l'instruction), parcours chaque tableau pour déterminer son type.
-Pour l'opcode, nous avons fait un disjonction de cas pour toutes les instructions
-possibles car il n'y a pas de modèle général.
+Pour le type, nous avons implémenté 3 tableaux, chacun contenant la liste des instructions du même type, puis après lecture du premier mot de la ligne (c'est à dire l'instruction), nous parcourons chaque tableau pour déterminer son type.
+Pour l'opcode, nous avons fait un disjonction de cas pour toutes les instructions possibles car il n'y a pas de modèle général.
 Enfin, pour les opérandes entières, nous avons fait le choix d'implémenter 3 fonctions : une récupère les opérandes d'une instruction de type I, une pour le type J et une pour le type R. Les trois fonctionnent de la manière suivante :
 -L'instruction et l'opérande voulu (rd, rs, rt, ...) sont passés en paramètre
--Selon l'opérande voulu, on parcours la chaine de caractère jusqu'au premier, deuxieme, ou troisieme dollar, puis on renvoie sous forme d'entier la valeur de l'opérande. Dans le cas ou l'opérande n'est pas précédée d'un dollar, on renvoie la valeur située apres un espace, une fois que tous les dollars ont été parcours.
+-Selon l'opérande voulu, on parcourt la chaine de caractère jusqu'au premier, deuxieme, ou troisieme $, puis on renvoie sous forme d'entier la valeur de l'opérande. Dans le cas ou l'opérande n'est pas précédée d'un $, on renvoie la valeur située apres un espace, une fois que tous les $ ont été parcours.
 
 * Avez-vous vu des motifs récurrents émerger ? Avez-vous "factorisé" ces motifs
 pour éviter de les répéter ? Si non, serait-ce difficile ?
@@ -40,7 +39,8 @@ Sans cette "factorisation", il aurait été long et fastidieux de traiter les in
 * Comment avez-vous procédé pour écrire les tests ? Étes-vous confiant·e·s que
 toutes les instructions gérées sont couvertes ? 
 
-[COMPLÉTER ICI]
+Nous avons rédigé deux autre fichiers sur le modèle du fichier test arithmetics.s déjà fourni avec le sujet, un fichier logic.s qui contient toutes les instructions logiques, et un fichier system.s qui contient toutes les instructions de type jump et de rotation/shift de mots. Nous avons été attentifs à ce que ces trois fichiers tests contiennent ensemble la totalité du jeu d'instruction MIPS, et certaines instructions se retrouvent même testées plusieurs fois. D'une part pour assurer la cohérence des instructions entre elles (pouvoir déterminer les EXPECTED_FINAL_STATE) pour la suite du projet), et également pour assurer que toutes les configurations d'usage étaient prises en compte.
+
 
 * Quelle a été votre expérience avec l'utilisation et la compréhension de la
 documentation (ie. des annexes) ?
@@ -48,10 +48,10 @@ documentation (ie. des annexes) ?
 Notre expérience a été dans l'ensemble positive avec la documentation, celle-ci étant claire et complète. Pour chacune des instruction, la manière dont elle est encodée est indiquée avec précision, ce qui nous a permis d'y voir clair quant à l'écriture de nos fonctions.
 
 * Cochez (en remplaçant `[ ]` par `[x]`) si vous avez :
-  - [ ] Implémenté la traduction pour des instructions de toutes les catéories
+  - [x] Implémenté la traduction pour des instructions de toutes les catéories
       (calcul, comparaisons, sauts, HI/LO, mémoire)
-  - [ ] Implémenté la traduction pour toutes les instructions de l'annexe 2
-  - [ ] Pris en compte les cas particuliers : valeurs négatives, hors limites,
+  - [x] Implémenté la traduction pour toutes les instructions de l'annexe 2
+  - [x] Pris en compte les cas particuliers : valeurs négatives, hors limites,
       noms d'instructions ou opérandes invalides...
 
 
