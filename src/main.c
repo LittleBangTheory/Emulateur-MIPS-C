@@ -21,7 +21,7 @@ int main(int argc, char **argv)
    } 
    else if (argc==3) {
       //mode = PAS_A_PAS;
-      pas_a_pas();
+      pas_a_pas(argv[1]);
    }
    else if (argc==4) {
       //mode = AUTOMATIQUE;

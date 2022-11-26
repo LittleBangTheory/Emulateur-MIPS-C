@@ -5,6 +5,7 @@
 #include <math.h>
 #include "header.h"
 
+
 void convert_hexa(char* instruction, char* instruction_hexa) {
 
     int dec_val=0, taille_instruction_encodee;
@@ -94,7 +95,7 @@ void getOpCode(char* instruction, char* opcode) {
     else if (!strcmp(commande, "OR")) sprintf(opcode, "%s", "100101");
     else if (!strcmp(commande, "SW")) sprintf(opcode, "%s", "101011");
     else if (!strcmp(commande, "XOR")) sprintf(opcode, "%s", "100110");
-    else sprintf(opcode, "%s", "000000");
+    else {printf("Instruction non reconnue\n"); exit(EXIT_FAILURE);}
 
 }
 
@@ -286,14 +287,28 @@ int getIArgs(char* instruction, int arg) {
             tmp++;
         } else if (instruction[i]==' ' && tmp==-1 && arg==IMMEDIATE) {
             res = 0;
-            for (int j=i+2; instruction[j]!='\0'; j++) {
-                res += (instruction[j-1] - '0');
-                res *= 10;
+            if (instruction[i+1] != '-') { //Cas ou IMMEDIATE est positif
+                for (int j=i+2; instruction[j]!='\0'; j++) {
+                    res += (instruction[j-1] - '0');
+                    res *= 10;
+                }
+                res /= 10;
+            } else { //Cas ou IMMEDIATE est négatif
+                for (int j=i+3; instruction[j]!='\0'; j++) { //On commence a i+3 pour ne pas lire le moins
+                    res += (instruction[j-1] - '0');
+                    res *= 10;
+                }
+                res /= 10;
+                res *= -1; //On change le signe de res
             }
-            res /= 10;
             tmp++;
         }
         i++;
+    }
+
+    if (((arg==RT || arg==RS) && (res>31 || res<0)) || (arg==SA && res>65535)) {
+        printf("Valeur des opérandes non valide\n");
+        exit(EXIT_FAILURE);
     }
 
     return res;
