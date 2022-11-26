@@ -1,13 +1,13 @@
-J
+J 
 JAL 
 JR 
 NOP
-LUI
+LUI $2, 4
 LW 
-ROTR 
-SLL
-SRL
-SW
+ROTR $3, $2, 4 
+SLL $4, $3, 5
+SRL $5, $4, 2
+SW 
 SYSCALL
 
 # EXPECTED_ASSEMBLY
