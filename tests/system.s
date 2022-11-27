@@ -1,5 +1,5 @@
 J 2
-ADDI $2, $0, 3
+ADDI $2, $0, 4
 JAL 2  
 JR $2
 NOP

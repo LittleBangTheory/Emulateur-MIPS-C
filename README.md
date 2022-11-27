@@ -39,7 +39,8 @@ Sans cette "factorisation", il aurait été long et fastidieux de traiter les in
 * Comment avez-vous procédé pour écrire les tests ? Étes-vous confiant·e·s que
 toutes les instructions gérées sont couvertes ? 
 
-Nous avons rédigé deux autre fichiers sur le modèle du fichier test arithmetics.s déjà fourni avec le sujet, un fichier logic.s qui contient toutes les instructions logiques, et un fichier system.s qui contient toutes les instructions de type jump et de rotation/shift de mots. Nous avons été attentifs à ce que ces trois fichiers tests contiennent ensemble la totalité du jeu d'instruction MIPS, et certaines instructions se retrouvent même testées plusieurs fois. D'une part pour assurer la cohérence des instructions entre elles (pouvoir déterminer les EXPECTED_FINAL_STATE) pour la suite du projet), et également pour assurer que toutes les configurations d'usage étaient prises en compte.
+Nous avons rédigé deux autre fichiers sur le modèle du fichier test arithmetics.s déjà fourni avec le sujet, un fichier logic.s qui contient toutes les instructions logiques, et un fichier system.s qui contient toutes les instructions de type jump et de rotation/shift de mots. Nous avons supposé que les fichiers commençaient à 0x0000 pour utiliser les instructions de type jump.
+Nous avons été attentifs à ce que ces trois fichiers tests contiennent ensemble la totalité du jeu d'instruction MIPS, et certaines instructions se retrouvent même testées plusieurs fois. D'une part pour assurer la cohérence des instructions entre elles (pouvoir déterminer les EXPECTED_FINAL_STATE) pour la suite du projet), et également pour assurer que toutes les configurations d'usage étaient prises en compte.
 
 
 * Quelle a été votre expérience avec l'utilisation et la compréhension de la
