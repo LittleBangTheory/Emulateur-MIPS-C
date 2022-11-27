@@ -96,6 +96,7 @@ void getOpCode(char* instruction, char* opcode) {
     else if (!strcmp(commande, "OR")) sprintf(opcode, "%s", "100101");
     else if (!strcmp(commande, "SW")) sprintf(opcode, "%s", "101011");
     else if (!strcmp(commande, "XOR")) sprintf(opcode, "%s", "100110");
+    else if (!strcmp(commande, "ROTR")) sprintf(opcode, "%s", "000010");
     else {printf("Instruction non reconnue\n"); exit(EXIT_FAILURE);}
 
 }
@@ -286,10 +287,18 @@ void encoder(char* instruction, char* instruction_encodee) {
 int getIArgs(char* instruction, int arg) {
 
     int i=0, res=0, tmp;
+    char* a = strstr(instruction, "LUI");
     switch (arg) {
         case RT: tmp = -1; break;
         case RS: tmp = -2; break;
-        case IMMEDIATE: tmp = -3; break;
+        case IMMEDIATE: {
+            if (a != NULL) {
+                tmp = -2;
+            } else {
+                tmp = -3; 
+            }
+            break;
+        }
         default: tmp = 0;
     }
 
@@ -299,11 +308,11 @@ int getIArgs(char* instruction, int arg) {
     // Si on veut IMMEDIATE, on prend la dernière valeur
 
     while (instruction[i]!='\0' && tmp<0) {
-        if (instruction[i]=='$' && instruction[i+2]==',') {
+        if (instruction[i]=='$' && ((instruction[i+2]-'0')<0 || (instruction[i+2]-'0')>9)) { 
             //Cas ou la valeur est inférieure a 10
             res = instruction[i+1] - '0'; //Convertit instruction[i+1] en int
             tmp++;
-        } else if (instruction[i]=='$' && instruction[i+2]!=',') {
+        } else if (instruction[i]=='$' && ((instruction[i+2]-'0')>=0 || (instruction[i+2]-'0')<=9)) {
             //Cas ou la valeur est supérieure a 10
             res = (10*(instruction[i+1]-'0')) + (instruction[i+2]-'0');
             tmp++;
