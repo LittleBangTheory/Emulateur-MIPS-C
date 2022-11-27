@@ -19,7 +19,7 @@ void pas_a_pas(char* file_programme) {
     }
 
     //Lecture du fichier
-    while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {   
+    while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {
         printf("%s", instruction);
         convert_hexa(instruction, instruction_hexa);
         printf("%s\n", instruction_hexa);
