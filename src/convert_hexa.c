@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-#include "header.h"
+#include "../headers/convert_hexa.h"
 
 
 void convert_hexa(char* instruction, char* instruction_hexa) {

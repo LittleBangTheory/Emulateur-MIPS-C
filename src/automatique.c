@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "header.h"
+#include "../headers/automatique.h"
 
 void automatique(char* file_programme, char* file_sortie_assemblage, char* file_sortie_execution) {
     printf("Mode automatique\n");

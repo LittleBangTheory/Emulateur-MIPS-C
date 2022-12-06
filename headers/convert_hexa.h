@@ -19,10 +19,6 @@
 #define ARG3 2
 #define ARGSA 3
 
-void pas_a_pas();
-void automatique(char*, char*, char*);
-void interactif();
-
 void convert_hexa(char*, char*);
 int getType(char*);
 void getOpCode(char*, char*);

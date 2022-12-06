@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "header.h"
+#include "../headers/pas_a_pas.h"
 
 void pas_a_pas(char* file_programme) {
     printf("Mode automatique\n");
