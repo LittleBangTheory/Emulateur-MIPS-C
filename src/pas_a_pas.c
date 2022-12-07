@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../headers/pas_a_pas.h"
+#include "../headers/read_and_convert.h"
 
 void pas_a_pas(char* file_programme) {
-    printf("Mode automatique\n");
+    printf("Mode pas à pas\n");
 
     char instruction[TAILLE_MAX];
     char instruction_hexa[TAILLE_MAX];
@@ -18,9 +19,10 @@ void pas_a_pas(char* file_programme) {
         exit(EXIT_FAILURE);
     }
 
+
     //Lecture du fichier
     while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {
-        printf("%s", instruction);
+        printf("%s\n", instruction);
         convert_hexa(instruction, instruction_hexa);
         printf("%s\n", instruction_hexa);
         printf("Press enter to continue");
