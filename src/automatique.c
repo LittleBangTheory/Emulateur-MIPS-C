@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "header.h"
+#include "../headers/automatique.h"
+#include "../headers/read_and_convert.h"
 
 void automatique(char* file_programme, char* file_sortie_assemblage, char* file_sortie_execution) {
     printf("Mode automatique\n");
@@ -23,7 +24,7 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
 
     
     //Lecture du fichier
-    while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {     
+    while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {  
         convert_hexa(instruction, instruction_hexa);
         fprintf(sortie_assemblage, "%s\n", instruction_hexa);
     }
