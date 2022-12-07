@@ -62,15 +62,41 @@ Notre expérience a été dans l'ensemble positive avec la documentation, celle-
 
 * Quelle structure en modules planifiez-vous d'utiliser pour l'émulateur ?
 
-[COMPLÉTER ICI]
+Nous avons découpé nos modules en 6 parties :
+
+Les modules de mode :
+  -Le module pas-à-pas, qui permet de lire un fichier ligne par ligne et de demander validation de l'utilisateur pour passer à la ligne suivante
+  -Le module automatique, qui permet de lire un fichier ligne par ligne sans demander d'input utilisateur
+  -Le module interactif, qui permet de lire les instructions une par une entrées par l'utilisateur dans la console
+
+Les modules de fonctionnalité :
+  -Le module de lecture et de conversion des instructions, qui permet de nettoyer les instructions, de les convertir en binaire puis en hexadécimal, et de les encoder.
+  -Le module de récupération des mnémotechniques, des opérandes et des types, qui permet de récupérer le code de l'opération puis le type de l'instruction par disjonction de cas, et les opérandes de l'instruction selon le type.
+  -Le module d'execution des instructions, qui permet d'executer les instructions selon leur type, et de mettre à jour les registres.
+
 
 * Quelles seront les fonctions principales de chaque module ?
 
-[COMPLÉTER ICI]
+Les modules de mode :
+  -Le module pas-à-pas, qui contient notamment :
+
+  -Le module automatique, qui contient notamment :
+
+  -Le module interactif, qui contient notamment :
+
+  -Le module de lecture et de conversion des instructions contient notamment :
+    `clean_instruction` qui permet de supprimer à la fin des instructions les espaces, les tabulations et les retours à la ligne
+    `convert_hexa` qui permet de convertir une instruction binaire en hexadécimal
+    `convert_binaire` qui permet de convertir une instruction décimale en binaire
+    `encoder` qui permet de ?
+  -Le module de récupération des mnémotechniques, des opérandes et des types contient notamment :
+    `getType` qui permet de récupérer le type de l'instruction
+    `getOpCode` qui permet de récupérer le code opération de l'instruction (le mnémotechnique)
+    `getIArgs`, `getJArgs`, et `getRArgs` qui permettent de récupérer les opérandes de l'instruction
 
 * Quels avantages voyez vous à cette structure (à comparer à un unique fichier)?
 
-[COMPLÉTER ICI]
+L'organisation en module permet de séparer les différentes fonctionnalités de l'émulateur, et donc de les développer et de les tester séparément. Cela permet également de mieux comprendre le fonctionnement de l'émulateur, et de le modifier plus facilement au besoin.
 
 
 ## Rendu 4
