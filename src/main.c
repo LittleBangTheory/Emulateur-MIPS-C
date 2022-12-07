@@ -6,11 +6,8 @@
 #include <string.h>
 #include "header.h"
 
-
 int main(int argc, char **argv)
 {
-
-
    if (argc==1) {
       interactif();
    } 
@@ -20,6 +17,5 @@ int main(int argc, char **argv)
    else if (argc==4) {
       automatique(argv[1], argv[2], argv[3]);
    }
-
     return 0;
 }
