@@ -20,3 +20,5 @@ void clear_instruction(char*, char**, int*);
 void convert_hexa(char*, char*);
 void convert_binaire(int, int, char*);
 void encoder(char*, char*);
+int getType(char*);
+int binaryToInt(char*);

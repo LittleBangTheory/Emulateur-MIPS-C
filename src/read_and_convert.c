@@ -31,8 +31,8 @@ void clear_instruction(char* instruction, char** adresse, int* size) {
 
 void convert_hexa(char* instruction, char* instruction_hexa) {
     //Initialisation des variables
-    int dec_val=0, taille_instruction_encodee, size_of_instruction_clean;
-    char instruction_encodee[32*sizeof(char)]; //Plus grande taille si ca marche pas
+    int dec_val=0, size_of_instruction_clean;
+    char instruction_encodee[33*sizeof(char)];
     char* adress_of_instruction_clean;
 
     //Nettoyer la chaine
@@ -40,14 +40,11 @@ void convert_hexa(char* instruction, char* instruction_hexa) {
     char* instruction_clean = adress_of_instruction_clean;
     //Encoder la chaine
     encoder(instruction_clean, instruction_encodee);
-
-    //Trouver la taille de la chaine
-    taille_instruction_encodee = strlen(instruction_encodee);
     
-    //Convertir le binaire en hexa
-    for (int j=taille_instruction_encodee-1; j>=0; j--) {
-        dec_val += (instruction_encodee[j] - '0')*pow(2, taille_instruction_encodee-j-1);
-    }
+    //Convertir le binaire en décimal
+    dec_val = binaryToInt(instruction_encodee);
+
+    //Ecrire le résultat dans instruction_hexa sous forme hexadecimale
     sprintf(instruction_hexa, "%.8x\n", dec_val);
     
     //Libérer la mémoire de instruction_clean
@@ -103,7 +100,6 @@ void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
     }
 }
 
-
 void encoder(char* instruction, char* instruction_encodee) {
 
     char commande[TAILLE_MAX];
@@ -130,10 +126,25 @@ void encoder(char* instruction, char* instruction_encodee) {
         rs[5] = '\0';
         imm[16] = '\0';
 
-        strcpy(instruction_encodee, opcode);
-        strcat(instruction_encodee, rs);
-        strcat(instruction_encodee, rt);
-        strcat(instruction_encodee, imm);
+        //Cas particulier des instructions BEQ et BNE
+        if (strcmp(opcode, "000100") == 0 || strcmp(opcode, "000101") == 0) {
+            strcpy(instruction_encodee, opcode);
+            strcat(instruction_encodee, rt);
+            strcat(instruction_encodee, rs);
+            strcat(instruction_encodee, imm);
+        } else if (strcmp(opcode, "000111") == 0 || strcmp(opcode, "000110") == 0) { // Cas particulier des instructions BGTZ et BLEZ
+            strcpy(instruction_encodee, opcode);
+            strcat(instruction_encodee, rs);
+            strcat(instruction_encodee, "00000");
+            strcat(instruction_encodee, imm);
+        }
+        else {
+            strcpy(instruction_encodee, opcode);
+            strcat(instruction_encodee, rs);
+            strcat(instruction_encodee, rt);
+            strcat(instruction_encodee, imm);
+        }
+
 
     } else if (type == TYPE_J) {
         convert_binaire(getJArgs(instruction), 26, target);
@@ -233,4 +244,16 @@ void encoder(char* instruction, char* instruction_encodee) {
 
 
     }
+}
+
+int binaryToInt(char* binary) {
+    int i = 0;
+    int result = 0;
+    int len = strlen(binary);
+    for (i=0; i < len; i++) {
+        if (binary[i] == '1') {
+            result += pow(2, len - i - 1);
+        }
+    }
+    return result;
 }

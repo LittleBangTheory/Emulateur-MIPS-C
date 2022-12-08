@@ -86,13 +86,16 @@ void getOpCode(char* instruction, char* opcode) {
 
 int getIArgs(char* instruction, int arg) {
 
-    int i=0, res=0, tmp;
-    char* lui = strstr(instruction, "LUI"); //Cas particulier de l'instruction LUI
+    int i=0, res=0, tmp, parenthese=0;
+    char opcode[7];
+    getOpCode(instruction, opcode);
+    
     switch (arg) {
         case RT: tmp = -1; break;
         case RS: tmp = -2; break;
         case IMMEDIATE: {
-            if (lui != NULL) {
+            //Cas particulier de LUI, BGTZ et BLEZ
+            if (strcmp(opcode, "001111")==0 || strcmp(opcode, "000111")==0 || strcmp(opcode, "000110")==0) {
                 tmp = -2;
             } else {
                 tmp = -3; 
@@ -108,10 +111,14 @@ int getIArgs(char* instruction, int arg) {
     // Si on veut IMMEDIATE, on prend la dernière valeur
 
 
-    /*Pour le cas avec les parentheses, regarder si instruction[i+2] ou instruction de[1+3] = ')'
-    Si c'est le cas, mettre i a 0 et tmp a -1, et ensuite lire la valeur de IMMEDIATE jusqu'a une valeur non numérique*/
-
     while (instruction[i]!='\0' && tmp<0) {
+        if (instruction[i] == '(' && arg == IMMEDIATE && parenthese == 0) {
+            //Cas particulier de LW et SW 
+            i = 0;
+            tmp = -2;
+            parenthese = 1;
+        }
+
         if (instruction[i]=='$' && ((instruction[i+2]-'0')<0 || (instruction[i+2]-'0')>9)) { 
             //Cas ou la valeur est inférieure a 10
             res = instruction[i+1] - '0'; //Convertit instruction[i+1] en int
@@ -123,13 +130,13 @@ int getIArgs(char* instruction, int arg) {
         } else if (instruction[i]==' ' && tmp==-1 && arg==IMMEDIATE) {
             res = 0;
             if (instruction[i+1] != '-') { //Cas ou IMMEDIATE est positif 
-                for (int j=i+1; instruction[j]!='\0'; j++) { 
+                for (int j=i+1; instruction[j]!='\0' && instruction[j]!='('; j++) { 
                     res += (instruction[j] - '0');
                     res *= 10;
                 }
                 res /= 10;
             } else { //Cas ou IMMEDIATE est négatif
-                for (int j=i+2; instruction[j]!='\0'; j++) { //On commence a i+2 pour ne pas lire le moins 
+                for (int j=i+2; instruction[j]!='\0' && instruction[j]!='('; j++) { //On commence a i+2 pour ne pas lire le moins 
                     res += (instruction[j] - '0');
                     res *= 10;
                 }

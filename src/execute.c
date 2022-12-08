@@ -6,7 +6,7 @@
 #include "../headers/read_and_convert.h"
 #include "../headers/get_from_instruction.h"
 
-
+/*
 void get_args(char* instruction) {
     char commande[TAILLE_MAX];
 
@@ -81,7 +81,7 @@ void get_args(char* instruction) {
 }
 
 
-/*
+
 void execute(char* command, char* arg1, char* arg2, char* arg3) {
     //création tableau pour stocker l'état des ? registres
     //disjonction de cas pour toutes les instructions
