@@ -87,12 +87,12 @@ void getOpCode(char* instruction, char* opcode) {
 int getIArgs(char* instruction, int arg) {
 
     int i=0, res=0, tmp;
-    char* a = strstr(instruction, "LUI");
+    char* lui = strstr(instruction, "LUI"); //Cas particulier de l'instruction LUI
     switch (arg) {
         case RT: tmp = -1; break;
         case RS: tmp = -2; break;
         case IMMEDIATE: {
-            if (a != NULL) {
+            if (lui != NULL) {
                 tmp = -2;
             } else {
                 tmp = -3; 
@@ -107,6 +107,10 @@ int getIArgs(char* instruction, int arg) {
     // Si on veut RS, alors on prend la valeur apres le 2eme #
     // Si on veut IMMEDIATE, on prend la dernière valeur
 
+
+    /*Pour le cas avec les parentheses, regarder si instruction[i+2] ou instruction de[1+3] = ')'
+    Si c'est le cas, mettre i a 0 et tmp a -1, et ensuite lire la valeur de IMMEDIATE jusqu'a une valeur non numérique*/
+
     while (instruction[i]!='\0' && tmp<0) {
         if (instruction[i]=='$' && ((instruction[i+2]-'0')<0 || (instruction[i+2]-'0')>9)) { 
             //Cas ou la valeur est inférieure a 10
@@ -118,15 +122,15 @@ int getIArgs(char* instruction, int arg) {
             tmp++;
         } else if (instruction[i]==' ' && tmp==-1 && arg==IMMEDIATE) {
             res = 0;
-            if (instruction[i+1] != '-') { //Cas ou IMMEDIATE est positif
-                for (int j=i+2; instruction[j]!='\0'; j++) {
-                    res += (instruction[j-1] - '0');
+            if (instruction[i+1] != '-') { //Cas ou IMMEDIATE est positif 
+                for (int j=i+1; instruction[j]!='\0'; j++) { 
+                    res += (instruction[j] - '0');
                     res *= 10;
                 }
                 res /= 10;
             } else { //Cas ou IMMEDIATE est négatif
-                for (int j=i+3; instruction[j]!='\0'; j++) { //On commence a i+3 pour ne pas lire le moins
-                    res += (instruction[j-1] - '0');
+                for (int j=i+2; instruction[j]!='\0'; j++) { //On commence a i+2 pour ne pas lire le moins 
+                    res += (instruction[j] - '0');
                     res *= 10;
                 }
                 res /= 10;
@@ -152,11 +156,11 @@ int getJArgs(char* instruction) {
     int target=0, res=0;
 
     for (int i=0; instruction[i] != '\0'; i++) {
-        if (instruction[i-1]==' ') {
+        if (instruction[i]==' ') {
             target = 1;
         }
         else if (target==1) {
-            res += (instruction[i-1] - '0');
+            res += (instruction[i] - '0');
             res *= 10;
         }
     }
@@ -198,8 +202,8 @@ int getRArgs(char* instruction, int arg) {
             tmp++;
         } else if (instruction[i]==' ' && tmp==-1 && arg==SA) {
             res = 0;
-            for (int j=i+2; instruction[j]!='\0'; j++) {
-                res += (instruction[j-1] - '0');
+            for (int j=i+1; instruction[j]!='\0'; j++) {
+                res += (instruction[j] - '0');
                 res *= 10;
             }
             res /= 10;

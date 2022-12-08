@@ -19,6 +19,7 @@ void interactif() {
             printf("Erreur de lecture\n");
             exit(EXIT_FAILURE);
         }
+
         convert_hexa(instruction, instruction_hexa);
         printf("%s\n", instruction_hexa);
         scanf_return = scanf(" %[^\n]", instruction);

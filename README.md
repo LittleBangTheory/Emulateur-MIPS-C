@@ -72,27 +72,31 @@ Les modules de mode :
 Les modules de fonctionnalité :
   -Le module de lecture et de conversion des instructions, qui permet de nettoyer les instructions, de les convertir en binaire puis en hexadécimal, et de les encoder.
   -Le module de récupération des mnémotechniques, des opérandes et des types, qui permet de récupérer le code de l'opération puis le type de l'instruction par disjonction de cas, et les opérandes de l'instruction selon le type.
-  -Le module d'execution des instructions, qui permet d'executer les instructions selon leur type, et de mettre à jour les registres.
+  -Le module d'execution des instructions, qui permet de récupérer la commande et les opérandes en appelant les fonctions du module de lecture et conversion, et d'executer les instructions selon leur commande et leurs arguments, en mettant à jour les registres. Nous avons choisit de ne pas séparer les instructions par type à l'execution car les instructions de même type ne prennent pas forcément le même nombre d'arguments ni ne s'executent de la même manière.
 
 
 * Quelles seront les fonctions principales de chaque module ?
 
 Les modules de mode :
-  -Le module pas-à-pas, qui contient notamment :
+  -Le module pas-à-pas, qui contient seulement `pas_a_pas`, qui permet de lire un fichier ligne par ligne en encodant les instructions en hexadécimal et en les éxécutant, puis de demander validation de l'utilisateur pour passer à la ligne suivante.
 
-  -Le module automatique, qui contient notamment :
+  -Le module automatique, qui contient seulement `automatique`, qui permet de lire un fichier ligne par ligne en encodant les instructions en hexadécimal et en les éxécutant.
 
-  -Le module interactif, qui contient notamment :
+  -Le module interactif, qui contient seulement `interactif`, qui permet de lire les instructions une par une entrées par l'utilisateur dans la console, de les encoder en hexadécimal et de les éxécuter.
 
   -Le module de lecture et de conversion des instructions contient notamment :
-    `clean_instruction` qui permet de supprimer à la fin des instructions les espaces, les tabulations et les retours à la ligne
-    `convert_hexa` qui permet de convertir une instruction binaire en hexadécimal
-    `convert_binaire` qui permet de convertir une instruction décimale en binaire
-    `encoder` qui permet de ?
+    `clean_instruction` qui permet de supprimer à la fin des instructions les espaces, les tabulations et les retours à la ligne.
+    `convert_hexa` qui permet de convertir une instruction binaire en hexadécimal.
+    `convert_binaire` qui permet de convertir une instruction décimale en binaire.
+    `encoder` qui permet de concaténer les éléments de l'instruction convertis en binaire et de convertir l'ensemble en hexadécimal en appelant convert_hexa.
   -Le module de récupération des mnémotechniques, des opérandes et des types contient notamment :
-    `getType` qui permet de récupérer le type de l'instruction
-    `getOpCode` qui permet de récupérer le code opération de l'instruction (le mnémotechnique)
-    `getIArgs`, `getJArgs`, et `getRArgs` qui permettent de récupérer les opérandes de l'instruction
+    `getType` qui permet de récupérer le type de l'instruction.
+    `getOpCode` qui permet de récupérer le code opération de l'instruction (le mnémotechnique).
+    `getIArgs`, `getJArgs`, et `getRArgs` qui permettent de récupérer les opérandes de l'instruction.
+  -Le module d'execution des instructions, qui contient notamment :
+    `get_args` qui permet de récupérer la commande et les opérandes de l'instruction en appelant les fonctions du module de lecture et de conversion.
+    `execute` qui permet d'executer l'instruction selon la commande et les opérandes récupérées.
+
 
 * Quels avantages voyez vous à cette structure (à comparer à un unique fichier)?
 
