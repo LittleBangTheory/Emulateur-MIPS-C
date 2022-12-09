@@ -6,7 +6,7 @@
 #include "../headers/read_and_convert.h"
 #include "../headers/get_from_instruction.h"
 
-/*
+
 void get_args(char* instruction) {
     char commande[TAILLE_MAX];
 
@@ -17,20 +17,20 @@ void get_args(char* instruction) {
 
     //typeR_ARG3 est le cas par défaut
     int typeR = ARG3;
-
-    int* type, rt, rs, imm, rd, sa, target;
+    //On a trois arguments maximum par instruction
+    int arg1, arg2, arg3;
     
-    *type = getType(instruction);
+    int type = getType(instruction);
 
     if (type == TYPE_I) {
         //on récupère les arguments
-        getIArgs(instruction, RT), 5, rt;
-        getIArgs(instruction, RS), 5, rs;
-        getIArgs(instruction, IMMEDIATE), 16, imm;
+        arg1 = getIArgs(instruction, RT); //rt
+        arg2 = getIArgs(instruction, RS); //rs
+        arg3 = getIArgs(instruction, IMMEDIATE); //imm
 
     } else if (type == TYPE_J) {
         //on récupère la cible du saut
-        getJArgs(instruction), 26, target;
+        arg1 = getJArgs(instruction); //target
         
     } else if (type == TYPE_R) {
         //On récupère la commande
@@ -60,30 +60,76 @@ void get_args(char* instruction) {
 
 
         if (typeR == ARGSA) {
-            getRArgs(instruction, RD), 5, rd;
-            getRArgs(instruction, RT), 5, rt;
-            getRArgs(instruction, SA), 5, sa;
+            arg1 = getRArgs(instruction, RD); //rd
+            arg2 = getRArgs(instruction, RT); //rt
+            arg3 = getRArgs(instruction, SA); //sa
         } else if (typeR == ARG3) {
         } else if (typeR == ARG2) {
-            getRArgs(instruction, RD), 5, rs;
-            getRArgs(instruction, RS), 5, rt;
+            arg1 = getRArgs(instruction, RD); //rs
+            arg2 = getRArgs(instruction, RS); //rt
         } else if (typeR == ARG1) {
-            getRArgs(instruction, RD), 5, rd;
+            arg1 = getRArgs(instruction, RD); //rd
         } else {
             //typeR = ARG3 est le cas par défaut
-            getRArgs(instruction, RD), 5, rd;
-            getRArgs(instruction, RT), 5, rt;
-            getRArgs(instruction, RS), 5, rs;
+            arg1 = getRArgs(instruction, RD); //rd
+            arg2 = getRArgs(instruction, RT); //rt
+            arg3 = getRArgs(instruction, RS); //rs
         }
     }
 
+    execute(commande, &arg1, &arg2, &arg3);
     //on envoie la commande et les opérandes à execute
 }
 
 
 
 void execute(char* command, char* arg1, char* arg2, char* arg3) {
-    //création tableau pour stocker l'état des ? registres
+    //création tableau pour stocker l'état des registres 2 à 25
+    //$0 et $1 sont réservés, mais on crée quand même un tableau de 0 à 25 pour plus de clarté 
+    int registre[26];
+    //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
+    registre[0]=0;
+    for (int i=1; i<26; i++) {
+        //on initialise tous les registres à 32767, la valeur max du type int, pour savoir à la fin de l'exécution si un registre a été modifié
+        registre[i]=32767;
+    }
+
     //disjonction de cas pour toutes les instructions
+    //code Github copilot, à reprendre
+    if (strcmp(command, "ADD") == 0) {
+        registre[*arg1] = registre[*arg2] + registre[*arg3];
+    } else if (strcmp(command, "ADDI") == 0) {
+        registre[*arg1] = registre[*arg2] + *arg3;
+    } else if (strcmp(command, "ADDIU") == 0) {
+        registre[*arg1] = registre[*arg2] + *arg3;
+    } else if (strcmp(command, "ADDU") == 0) {
+        registre[*arg1] = registre[*arg2] + registre[*arg3];
+    } else if (strcmp(command, "AND") == 0) {
+        registre[*arg1] = registre[*arg2] & registre[*arg3];
+    } else if (strcmp(command, "ANDI") == 0) {
+        registre[*arg1] = registre[*arg2] & *arg3;
+    } else if (strcmp(command, "BEQ") == 0) {
+        if (registre[*arg1] == registre[*arg2]) {
+            //on saute à l'instruction cible
+        }
+    } else if (strcmp(command, "BGEZ") == 0) {
+        if (registre[*arg1] >= 0) {
+            //on saute à l'instruction cible
+        }
+    } else if (strcmp(command, "BGEZAL") == 0) {
+        if (registre[*arg1] >= 0) {
+            //on saute à l'instruction cible
+        }
+    } else if (strcmp(command, "BGTZ") == 0) {
+        if (registre[*arg1] > 0) {
+            //on saute à l'instruction cible
+        }
+    } else if (strcmp(command, "BLEZ") == 0) {
+        if (registre[*arg1] <= 0) {
+            //on saute à l'instruction cible
+        }
+    } else if (strcmp(command, "BLTZ") == 0) {
+        if (registre[*arg1] < 0) {
+            //on saute à l'instruction cible
+        }
 }
-*/
