@@ -5,6 +5,7 @@
 #include <math.h>
 #include "../headers/read_and_convert.h"
 #include "../headers/get_from_instruction.h"
+#include "../headers/execute.h"
 
 void define_registers(int* registre) {
     //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
