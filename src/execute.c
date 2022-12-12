@@ -6,8 +6,16 @@
 #include "../headers/read_and_convert.h"
 #include "../headers/get_from_instruction.h"
 
+void define_registers(int* registre) {
+    //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
+    registre[0]=0;
+    for (int i=1; i<NB_REGISTRE; i++) {
+        //on initialise tous les registres à 32767, la valeur max du type int, pour savoir à la fin de l'exécution si un registre a été modifié
+        registre[i]=32767;
+    }
+}
 
-void get_args(char* instruction) {
+void get_args(char* instruction, int* registre) {
     char commande[TAILLE_MAX];
 
     //Disjonction de cas des types
@@ -77,59 +85,71 @@ void get_args(char* instruction) {
         }
     }
 
-    execute(commande, &arg1, &arg2, &arg3);
+    execute(commande, &arg1, &arg2, &arg3, registre);
     //on envoie la commande et les opérandes à execute
 }
 
 
 
-void execute(char* command, char* arg1, char* arg2, char* arg3) {
-    //création tableau pour stocker l'état des registres 2 à 25
-    //$0 et $1 sont réservés, mais on crée quand même un tableau de 0 à 25 pour plus de clarté 
-    int registre[26];
-    //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
-    registre[0]=0;
-    for (int i=1; i<26; i++) {
-        //on initialise tous les registres à 32767, la valeur max du type int, pour savoir à la fin de l'exécution si un registre a été modifié
-        registre[i]=32767;
-    }
-
+void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
     //disjonction de cas pour toutes les instructions
     //code Github copilot, à reprendre
     if (strcmp(command, "ADD") == 0) {
         registre[*arg1] = registre[*arg2] + registre[*arg3];
     } else if (strcmp(command, "ADDI") == 0) {
         registre[*arg1] = registre[*arg2] + *arg3;
-    } else if (strcmp(command, "ADDIU") == 0) {
-        registre[*arg1] = registre[*arg2] + *arg3;
-    } else if (strcmp(command, "ADDU") == 0) {
-        registre[*arg1] = registre[*arg2] + registre[*arg3];
     } else if (strcmp(command, "AND") == 0) {
         registre[*arg1] = registre[*arg2] & registre[*arg3];
-    } else if (strcmp(command, "ANDI") == 0) {
-        registre[*arg1] = registre[*arg2] & *arg3;
     } else if (strcmp(command, "BEQ") == 0) {
         if (registre[*arg1] == registre[*arg2]) {
-            //on saute à l'instruction cible
-        }
-    } else if (strcmp(command, "BGEZ") == 0) {
-        if (registre[*arg1] >= 0) {
-            //on saute à l'instruction cible
-        }
-    } else if (strcmp(command, "BGEZAL") == 0) {
-        if (registre[*arg1] >= 0) {
-            //on saute à l'instruction cible
-        }
-    } else if (strcmp(command, "BGTZ") == 0) {
-        if (registre[*arg1] > 0) {
             //on saute à l'instruction cible
         }
     } else if (strcmp(command, "BLEZ") == 0) {
         if (registre[*arg1] <= 0) {
             //on saute à l'instruction cible
-        }
-    } else if (strcmp(command, "BLTZ") == 0) {
-        if (registre[*arg1] < 0) {
+    }
+    } else if (strcmp(command, "BGTZ") == 0) {
+        if (registre[*arg1] > 0) {
             //on saute à l'instruction cible
         }
+    } else if (strcmp(command, "BNE") == 0) {
+        if (/**/) {
+            //on saute à l'instruction cible
+        }
+    } else if(strcmp(command, "DIV") == 0){
+
+    } else if(strcmp(command, "J") == 0){
+        
+    } else if(strcmp(command, "JAL") == 0){
+        
+    } else if(strcmp(command, "JR") == 0){
+        
+    } else if(strcmp(command, "LUI") == 0){
+        
+    } else if(strcmp(command, "LW") == 0){
+        
+    } else if(strcmp(command, "MFHI") == 0){
+        
+    } else if(strcmp(command, "MFLO") == 0){
+        
+    } else if(strcmp(command, "MULT") == 0){
+        
+    } else if(strcmp(command, "OR") == 0){
+        
+    } else if(strcmp(command, "ROTR") == 0){
+        
+    } else if(strcmp(command, "SLL") == 0){
+        
+    } else if(strcmp(command, "SLT") == 0){
+        
+    } else if(strcmp(command, "SRL") == 0){
+        
+    } else if(strcmp(command, "SUB") == 0){
+        
+    } else if(strcmp(command, "SW") == 0){
+        
+    } else if(strcmp(command, "XOR") == 0){
+        
+    } else {
+        printf("Erreur : commande inconnue");
 }
