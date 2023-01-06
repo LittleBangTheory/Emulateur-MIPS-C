@@ -22,6 +22,7 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
         exit(EXIT_FAILURE);
     }
 
+    /*
     //Comptage du nombre de lignes du fichier
     int lines = 0;
     char c;
@@ -30,8 +31,9 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
             lines++;
         }
     }
+    */
     
-    //Lecture du fichier
+    //Lecture du fichier, conversion et écriture dans le fichier de sortie
     while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {  
         convert_hexa(instruction, instruction_hexa);
         fprintf(sortie_assemblage, "%s\n", instruction_hexa);

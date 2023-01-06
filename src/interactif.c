@@ -12,8 +12,8 @@ void interactif() {
     char instruction[TAILLE_MAX];
     char instruction_hexa[TAILLE_MAX];
     int scanf_return;
-    int* registre[NB_REGISTRE];
-    define_registers(registre);
+    //int* registre[NB_REGISTRE];
+    //define_registers(registre);
 
     scanf_return = scanf(" %[^\n]", instruction);
     while(strcmp(instruction, "EXIT")) {
@@ -27,7 +27,7 @@ void interactif() {
         scanf_return = scanf(" %[^\n]", instruction);
     }
     // a mettre dans la boucle
-    get_args(instruction);
+    //get_args(instruction);
 
 
 }

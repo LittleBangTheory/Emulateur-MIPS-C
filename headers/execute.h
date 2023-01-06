@@ -4,6 +4,8 @@
 #define LO 32
 #define HI 33
 
+/*
 void define_registers(int*);
 void get_args(char*, int*);
 void execute(char*, char*, char*, char*, int*);
+*/

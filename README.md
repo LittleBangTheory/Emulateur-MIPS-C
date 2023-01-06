@@ -62,7 +62,7 @@ Notre expérience a été dans l'ensemble positive avec la documentation, celle-
 
 * Quelle structure en modules planifiez-vous d'utiliser pour l'émulateur ?
 
-Nous avons découpé nos modules en 6 parties :
+Nous avons découpé nos modules en 7 parties :
 
 Les modules de mode :
   -Le module pas-à-pas, qui permet de lire un fichier ligne par ligne et de demander validation de l'utilisateur pour passer à la ligne suivante
@@ -73,6 +73,7 @@ Les modules de fonctionnalité :
   -Le module de lecture et de conversion des instructions, qui permet de nettoyer les instructions, de les convertir en binaire puis en hexadécimal, et de les encoder.
   -Le module de récupération des mnémotechniques, des opérandes et des types, qui permet de récupérer le code de l'opération puis le type de l'instruction par disjonction de cas, et les opérandes de l'instruction selon le type.
   -Le module d'execution des instructions, qui permet de récupérer la commande et les opérandes en appelant les fonctions du module de lecture et conversion, et d'executer les instructions selon leur commande et leurs arguments, en mettant à jour les registres. Nous avons choisit de ne pas séparer les instructions par type à l'execution car les instructions de même type ne prennent pas forcément le même nombre d'arguments ni ne s'executent de la même manière.
+  -Le module de mémoire, qui permet de simuler la mémoire à l'aide de listes chainées, qui va contenir les données via l'instruction SW et les récupérer via l'instruction LW.
 
 
 * Quelles seront les fonctions principales de chaque module ?

@@ -7,7 +7,7 @@
 #include "../headers/get_from_instruction.h"
 #include "../headers/execute.h"
 
-
+/*
 void define_registers(int* registre) {
     //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
     registre[0]=0;
@@ -93,7 +93,6 @@ void get_args(char* instruction, int* registre) {
 
 void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
     //disjonction de cas pour toutes les instructions
-    //code Github copilot, à reprendre
     if (strcmp(command, "ADD") == 0) {
         registre[*arg1] = registre[*arg2] + registre[*arg3];
     } else if (strcmp(command, "ADDI") == 0) {
@@ -113,7 +112,7 @@ void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
             //on saute à l'instruction cible
         }
     } else if (strcmp(command, "BNE") == 0) {
-        if (/**/) {
+        if () {
             //on saute à l'instruction cible
         }
     } else if(strcmp(command, "DIV") == 0){
@@ -158,3 +157,4 @@ void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
     } else {
         printf("Erreur : commande inconnue");
 }
+*/
