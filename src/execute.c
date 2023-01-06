@@ -7,12 +7,13 @@
 #include "../headers/get_from_instruction.h"
 #include "../headers/execute.h"
 
+
 void define_registers(int* registre) {
     //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
     registre[0]=0;
-    for (int i=1; i<NB_REGISTRE; i++) {
-        //on initialise tous les registres à 32767, la valeur max du type int, pour savoir à la fin de l'exécution si un registre a été modifié
-        registre[i]=32767;
+    for (long int i=1; i<NB_REGISTRE; i++) {
+        //on initialise tous les registres à la valeur max du type long int, pour savoir à la fin de l'exécution si un registre a été modifié
+        registre[i]=2147483647;
     }
 }
 
@@ -90,8 +91,6 @@ void get_args(char* instruction, int* registre) {
     //on envoie la commande et les opérandes à execute
 }
 
-
-
 void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
     //disjonction de cas pour toutes les instructions
     //code Github copilot, à reprendre
@@ -118,7 +117,8 @@ void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
             //on saute à l'instruction cible
         }
     } else if(strcmp(command, "DIV") == 0){
-
+        registre[LO]=registre[*arg1]/registre[*arg2];
+        registre[HI]=registre[*arg2]%registre[*arg2];
     } else if(strcmp(command, "J") == 0){
         
     } else if(strcmp(command, "JAL") == 0){
@@ -126,31 +126,35 @@ void execute(char* command, char* arg1, char* arg2, char* arg3, int* registre) {
     } else if(strcmp(command, "JR") == 0){
         
     } else if(strcmp(command, "LUI") == 0){
-        
+        registre[*arg1] = *arg3 << 16;
     } else if(strcmp(command, "LW") == 0){
         
     } else if(strcmp(command, "MFHI") == 0){
-        
+        registre[*arg1] = registre[HI];
     } else if(strcmp(command, "MFLO") == 0){
-        
+        registre[*arg1] = registre[LO];
     } else if(strcmp(command, "MULT") == 0){
-        
+        registre[LO] = registre[*arg1] * registre[*arg2];
     } else if(strcmp(command, "OR") == 0){
-        
+        registre[*arg1] = registre[*arg2] | registre[*arg3];
     } else if(strcmp(command, "ROTR") == 0){
-        
+    
     } else if(strcmp(command, "SLL") == 0){
-        
+        registre[*arg1] = registre[*arg2] << *arg3;    
     } else if(strcmp(command, "SLT") == 0){
-        
+        if (registre[*arg2] < registre[*arg3]) {
+            registre[*arg1] = 1;
+        } else {
+            registre[*arg1] = 0;
+        }
     } else if(strcmp(command, "SRL") == 0){
-        
+        registre[*arg1] = registre[*arg2] >> *arg3;
     } else if(strcmp(command, "SUB") == 0){
-        
+        registre[*arg1] = registre[*arg2] - registre[*arg3];
     } else if(strcmp(command, "SW") == 0){
         
     } else if(strcmp(command, "XOR") == 0){
-        
+        registre[*arg1] = registre[*arg2] ^ registre[*arg3];
     } else {
         printf("Erreur : commande inconnue");
 }

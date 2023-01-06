@@ -22,6 +22,14 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
         exit(EXIT_FAILURE);
     }
 
+    //Comptage du nombre de lignes du fichier
+    int lines = 0;
+    char c;
+    while ((c = fgetc(programme)) != EOF) {
+        if (c == '\n') {
+            lines++;
+        }
+    }
     
     //Lecture du fichier
     while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {  

@@ -15,8 +15,8 @@ void interactif() {
     int* registre[NB_REGISTRE];
     define_registers(registre);
 
-     scanf_return = scanf(" %[^\n]", instruction);
-     while(strcmp(instruction, "EXIT")) {
+    scanf_return = scanf(" %[^\n]", instruction);
+    while(strcmp(instruction, "EXIT")) {
         if (scanf_return == EOF) {
             printf("Erreur de lecture\n");
             exit(EXIT_FAILURE);
@@ -29,4 +29,16 @@ void interactif() {
     // a mettre dans la boucle
     get_args(instruction);
 
+
+}
+
+void count_file_lines(FILE* file) {
+    int nb_lines = 0;
+    char c;
+    while ((c = fgetc(file)) != EOF) {
+        if (c == ' ') {
+            nb_lines++;
+        }
+    }
+    printf("nb_lines = %d\n", nb_lines);
 }
