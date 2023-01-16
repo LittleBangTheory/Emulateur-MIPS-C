@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../headers/memoire.h"
 
-void afficherMemoire(memoire *m) {
+void printMemory(memoire *m) {
     if (m == NULL) {
         printf("Memoire vide\n");
     } else {
@@ -13,33 +13,52 @@ void afficherMemoire(memoire *m) {
     }
 }
 
-void ajouterMemoire(memoire **m, int data, long adresse) {
+int storeElement(memoire **m, int data, long adresse) {
     memoire *nouveau = malloc(sizeof(*nouveau));
+    memoire *tmp = *m;
     if (nouveau == NULL) {
-        exit(EXIT_FAILURE);
+        return -1;
     }
-    nouveau->data = data;
-    nouveau->adresse = adresse;
-    nouveau->next = *m;
-    *m = nouveau;
+
+    while(tmp != NULL && tmp->adresse != adresse) {
+        tmp = tmp->next;
+    }
+    if (tmp != NULL) {
+        tmp->data = data;
+        return 0;
+    } else {
+        nouveau->data = data;
+        nouveau->adresse = adresse;
+        nouveau->next = *m;
+        *m = nouveau;
+        return 0;
+    }
+    return 0;
 }
 
-void supprimerMemoire(memoire **m, long adresse) {
+//On renvoie 0 si l'adresse est trouvee, -1 sinon
+int loadElement(memoire **m, long adresse, int *resultat) {
     memoire *tmp = *m;
-    memoire *tmp2 = NULL;
     while (tmp != NULL && tmp->adresse != adresse) {
-        tmp2 = tmp;
         tmp = tmp->next;
     }
     if (tmp == NULL) {
-        printf("Adresse non trouvee\n");
+        return -1;
     } else {
-        if (tmp2 == NULL) {
-            *m = tmp->next;
-        } else {
-            tmp2->next = tmp->next;
-        }
-        free(tmp);
+        *resultat = tmp->data;
+        return 0;
     }
 }
+
+void clearMemory(memoire **m) {
+    memoire *tmp = *m;
+    memoire *tmp2 = NULL;
+    while (tmp != NULL) {
+        tmp2 = tmp->next;
+        free(tmp);
+        tmp = tmp2;
+    }
+    *m = NULL;
+}
+
 

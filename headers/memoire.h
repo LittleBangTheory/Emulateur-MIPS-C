@@ -1,3 +1,6 @@
+#ifndef MEMOIRE_H
+#define MEMOIRE_H
+
 typedef struct memoire memoire;
 struct memoire {
     int data;
@@ -5,6 +8,9 @@ struct memoire {
     memoire *next;
 };
 
-void afficherMemoire(memoire *m);
-void ajouterMemoire(memoire **m, int data, long adresse);
-void supprimerMemoire(memoire **m, long adresse);
+void printMemory(memoire *m);
+int storeElement(memoire **m, int data, long adresse);
+int loadElement(memoire **m, long, int*);
+void clearMemory(memoire **m);
+
+#endif

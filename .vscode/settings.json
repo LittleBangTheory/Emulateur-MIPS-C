@@ -6,6 +6,8 @@
         "get_from_instruction.h": "c",
         "interactif.h": "c",
         "read_and_convert.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "memoire.h": "c",
+        "save_instruction.h": "c"
     }
 }
