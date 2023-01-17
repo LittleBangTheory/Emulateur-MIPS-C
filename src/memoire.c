@@ -25,13 +25,11 @@ int storeElement(memoire **m, int data, long adresse) {
     }
     if (tmp != NULL) {
         tmp->data = data;
-        return 0;
     } else {
         nouveau->data = data;
         nouveau->adresse = adresse;
         nouveau->next = *m;
         *m = nouveau;
-        return 0;
     }
     return 0;
 }

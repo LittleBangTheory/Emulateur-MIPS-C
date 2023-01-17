@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "../headers/save_instruction.h"
 
-void add_instruction(char* command, int arg1, int arg2, int arg3, instruction *current){
-    instruction *new_instruction = malloc(sizeof(instruction));
+void add_instruction(char* command, int arg1, int arg2, int arg3, stored_instruction *current){
+    stored_instruction *new_instruction = malloc(sizeof(stored_instruction));
     
     new_instruction->command = command;
     new_instruction->arg1 = arg1;
@@ -23,9 +23,9 @@ void add_instruction(char* command, int arg1, int arg2, int arg3, instruction *c
     }
 }
 
-void delete_instructions(instruction* last_instruction){
-    instruction* current = last_instruction;
-    instruction* prev = NULL;
+void delete_instructions(stored_instruction* last_instruction){
+    stored_instruction* current = last_instruction;
+    stored_instruction* prev = NULL;
 
     while (current != NULL){
         prev = current->prev;
@@ -34,23 +34,23 @@ void delete_instructions(instruction* last_instruction){
     }
 }
 
-void afficher_instructions(instruction* last_instruction){
-    instruction* current = last_instruction;
+void afficher_instructions(stored_instruction* last_instruction){
+    stored_instruction* current = last_instruction;
     while (current != NULL){
-        printf("%s %d %d %d", current->command, current->arg1, current->arg2, current->arg3);
+        printf("stored_instruction :%s %d %d %d", current->command, current->arg1, current->arg2, current->arg3);
         current = current->prev;
     }
 }
 
-void branch(instruction *current, int branch_value){
+void branch(stored_instruction *current, int branch_value){
     current = current->next;
-    execute(current->command, current->arg1, current->arg2, current->arg3, registre, memoire);
+    //(a cause de l'erreur) execute(current->command, current->arg1, current->arg2, current->arg3, registre, memoire);
     for (int i = 0; i < branch_value; i++){
         current = current->next;
     }
 }
 
-void jump(instruction *current, int line_number){
+void jump(stored_instruction *current, int line_number){
     int i = 0;
     while (i < line_number){
         current = current->next;

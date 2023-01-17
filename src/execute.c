@@ -19,29 +19,32 @@ void define_registers(int* registre) {
     }
 }
 
-void fill_instructions(char* instruction, struct instruction** liste_instruction) {
-    int args[2];
+void fill_instructions(char* instruction, stored_instruction* liste_instruction, memoire* memoire, int* registre) {
+    int args[3];
     int i = 0;
     char commande[10];
 
-    const char* separators = " ,()$";
+    const char* separators = " ,()$\n";
     char* token = strtok(instruction, separators);
     while (token != NULL) {
-        printf("%s\n", token);
         if (i == 0) {
             //on récupère la commande
-            char* commande = token;
+            strcpy(commande, token);
         } else {
             //on récupère les opérandes
             args[i-1] = atoi(token);
         }
         token = strtok(NULL, separators);
+        i++;
     }
 
     add_instruction(commande, args[0], args[1], args[2], liste_instruction);
+
+    //Juste pour tester
+    //execute(commande, &args[0], &args[1], &args[2], registre, memoire);
 }
 
-void execute(char* command, int* arg1, int* arg2, int* arg3, int* registre, memoire** memoire) {
+void execute(char* command, int* arg1, int* arg2, int* arg3, int* registre, memoire* memoire) {
     //disjonction de cas pour toutes les instructions
     if (strcmp(command, "ADD") == 0) {
         registre[*arg1] = registre[*arg2] + registre[*arg3];
@@ -79,7 +82,9 @@ void execute(char* command, int* arg1, int* arg2, int* arg3, int* registre, memo
     } else if(strcmp(command, "LUI") == 0){
         registre[*arg1] = *arg3 << 16;
     } else if(strcmp(command, "LW") == 0){
-        
+        printf("*arg2 + registre[*arg3] : %d", *arg2 + registre[*arg3]);
+        printf("ret value :%d\n", loadElement(&memoire, *arg2 + registre[*arg3], &registre[*arg1]));
+        printf("$%d: %d\n", *arg1, registre[*arg1]);
     } else if(strcmp(command, "MFHI") == 0){
         registre[*arg1] = registre[HI];
     } else if(strcmp(command, "MFLO") == 0){
@@ -103,8 +108,7 @@ void execute(char* command, int* arg1, int* arg2, int* arg3, int* registre, memo
     } else if(strcmp(command, "SUB") == 0){
         registre[*arg1] = registre[*arg2] - registre[*arg3];
     } else if(strcmp(command, "SW") == 0){
-        storeElement(memoire, registre[*arg1], registre[*arg2] + *arg3);
-        printMemory(*memoire);
+        storeElement(&memoire, registre[*arg1], registre[*arg3] + *arg2);
     } else if(strcmp(command, "XOR") == 0){
         registre[*arg1] = registre[*arg2] ^ registre[*arg3];
     } else {

@@ -9,10 +9,8 @@
 
 
 void pas_a_pas(char* file_programme) {
-    printf("Mode pas à pas\n");
-
     char instruction[TAILLE_MAX];
-    char instruction_hexa[TAILLE_MAX];
+    //char instruction_hexa[TAILLE_MAX];
     char enter;
 
     FILE* programme;
@@ -27,6 +25,7 @@ void pas_a_pas(char* file_programme) {
     //Initialisation de la mémoire et de la liste des instructions
     memoire* memoire = NULL;
     struct instruction* liste_instruction = NULL;
+    
 
     //Lecture du fichier
     int registre[NB_REGISTRE];
@@ -37,7 +36,8 @@ void pas_a_pas(char* file_programme) {
             //convert_hexa(instruction, instruction_hexa);
             //printf("%s\n", instruction_hexa);
 
-            fill_instructions(instruction, &liste_instruction);
+            fill_instructions(instruction, liste_instruction, memoire, registre);
+            //printMemory(memoire);
             afficher_instructions(liste_instruction);
 
             printf("Press enter to continue");
