@@ -36,7 +36,7 @@ void delete_instructions(stored_instruction* last_instruction){
 
 void afficher_instructions(stored_instruction* last_instruction){
     stored_instruction* current = last_instruction;
-    while (current != NULL){
+    while (current->prev != NULL){
         printf("stored_instruction :%s %d %d %d", current->command, current->arg1, current->arg2, current->arg3);
         current = current->prev;
     }
@@ -44,7 +44,8 @@ void afficher_instructions(stored_instruction* last_instruction){
 
 void branch(stored_instruction *current, int branch_value){
     current = current->next;
-    //(a cause de l'erreur) execute(current->command, current->arg1, current->arg2, current->arg3, registre, memoire);
+    //execute(current->command, current->arg1, current->arg2, current->arg3, registre, memoire);
+    //erreur au dessus parce que execute n'est pas terminé, et registre et mémoire pas passés en paramètre de ce fichier
     for (int i = 0; i < branch_value; i++){
         current = current->next;
     }
@@ -52,6 +53,7 @@ void branch(stored_instruction *current, int branch_value){
 
 void jump(stored_instruction *current, int line_number){
     int i = 0;
+    //a vérifier si jump aussi execute l'instruction à pc+4 avant de sauter
     while (i < line_number){
         current = current->next;
         i++;
