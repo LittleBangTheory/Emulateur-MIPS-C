@@ -4,6 +4,7 @@
 
 void add_instruction(char* command, int arg1, int arg2, int arg3, stored_instruction *current){
     stored_instruction *new_instruction = malloc(sizeof(stored_instruction));
+    //malloc de *stored_instruction, pas stored_instruction, à remplacer 
     
     new_instruction->command = command;
     new_instruction->arg1 = arg1;
