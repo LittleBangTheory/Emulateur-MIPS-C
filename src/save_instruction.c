@@ -36,6 +36,7 @@ void add_instruction(char* command, int arg1, int arg2, int arg3, stored_instruc
 
     /*
     stored_instruction *new_instruction = malloc(sizeof(stored_instruction));
+    //malloc de *stored_instruction, pas stored_instruction, à remplacer 
     
     new_instruction->command = command;
     new_instruction->arg1 = arg1;
@@ -91,7 +92,8 @@ void clear_instructions(stored_instruction **instruction) {
 
 void branch(stored_instruction *current, int branch_value){
     current = current->next;
-    //(a cause de l'erreur) execute(current->command, current->arg1, current->arg2, current->arg3, registre, memoire);
+    //execute(current->command, current->arg1, current->arg2, current->arg3, registre, memoire);
+    //erreur au dessus parce que execute n'est pas terminé, et registre et mémoire pas passés en paramètre de ce fichier
     for (int i = 0; i < branch_value; i++){
         current = current->next;
     }
@@ -99,6 +101,7 @@ void branch(stored_instruction *current, int branch_value){
 
 void jump(stored_instruction *current, int line_number){
     int i = 0;
+    //a vérifier si jump aussi execute l'instruction à pc+4 avant de sauter
     while (i < line_number){
         current = current->next;
         i++;
