@@ -19,7 +19,7 @@ void define_registers(int* registre) {
     }
 }
 
-void fill_instructions(char* instruction, stored_instruction* liste_instruction, memoire* memoire, int* registre) {
+void fill_instructions(char* instruction, stored_instruction** liste_instruction, memoire* memoire, int* registre) {
     int args[3];
     int i = 0;
     char commande[10];

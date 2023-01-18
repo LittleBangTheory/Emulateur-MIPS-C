@@ -10,7 +10,7 @@
 #include "../headers/save_instruction.h"
 
 void define_registers(int*);
-void fill_instructions(char*, stored_instruction*, memoire*, int*);
+void fill_instructions(char*, stored_instruction**, memoire*, int*);
 void execute(char*, int*, int*, int*, int*, memoire*);
 
 #endif

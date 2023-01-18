@@ -7,7 +7,7 @@ SRC_C := $(wildcard src/*.c)
 # Tapez "make" pour compiler le programme et produire "emul-mips".
 
 $(MAIN): $(SRC_C)
-	gcc $^ -o $@ -Wall -Wextra -O2 -lm -g
+	gcc $^ -o $@ -Wall -Wextra -O2 -lm -g -fsanitize=address
 
 # Tapez "make test-cli" pour tester si vous gérez bien le mode automatique de
 # la ligne de commande pour le rendu #1.

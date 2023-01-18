@@ -36,14 +36,15 @@ void pas_a_pas(char* file_programme) {
             //convert_hexa(instruction, instruction_hexa);
             //printf("%s\n", instruction_hexa);
 
-            fill_instructions(instruction, liste_instruction, memoire, registre);
+            fill_instructions(instruction, &liste_instruction, memoire, registre);
             //printMemory(memoire);
-            afficher_instructions(liste_instruction);
 
             printf("Press enter to continue");
             enter = scanf("%c", &enter);
         }
     }
+    afficher_instructions(liste_instruction);
+    clear_instructions(&liste_instruction);
 
 
     fclose(programme);
