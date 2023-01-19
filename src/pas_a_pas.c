@@ -23,29 +23,47 @@ void pas_a_pas(char* file_programme) {
     } 
 
     //Initialisation de la mémoire et de la liste des instructions
-    memoire* memoire = NULL;
-    struct instruction* liste_instruction = NULL;
+    stored_memory* memoire = NULL;
+    stored_instruction* liste_instruction = NULL;
+
+    char* commande = malloc(sizeof(char)*5);
+    int arg1, arg2, arg3, line_number=0;
     
+    //Initialisation des registres
+    long int registre[NB_REGISTRE];
+    define_registers(registre);
 
     //Lecture du fichier
-    int registre[NB_REGISTRE];
-    define_registers(registre);
     while (fgets(instruction, TAILLE_MAX, programme) != NULL) {
         if (instruction[0] >= 65 && instruction[0] <= 90) {
-            printf("Instruction rentrée : %s\n", instruction);
+            //printf("Instruction rentrée : %s\n", instruction);
             //convert_hexa(instruction, instruction_hexa);
             //printf("%s\n", instruction_hexa);
 
-            fill_instructions(instruction, &liste_instruction, memoire, registre);
-            //printMemory(memoire);
-
-            printf("Press enter to continue");
-            enter = scanf("%c", &enter);
+            get_args(instruction, &commande, &arg1, &arg2, &arg3);
+            add_instruction(commande, arg1, arg2, arg3, line_number, &liste_instruction);
+            line_number++;
         }
     }
-    afficher_instructions(liste_instruction);
+
+    //Execution du programme
+    stored_instruction* current = liste_instruction;
+    while (current != NULL){
+        afficher_instruction_courrante(current);
+        execute(current, registre, &memoire);
+
+        afficherRegistres(registre);
+
+        printf("Press enter to continue\n");
+        enter = scanf("%c", &enter);
+
+        current = current->next;
+    }
+
+
+
+    free(commande);
     clear_instructions(&liste_instruction);
-
-
+    clearMemory(&memoire);
     fclose(programme);
 }

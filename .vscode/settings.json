@@ -8,6 +8,8 @@
         "read_and_convert.h": "c",
         "ctype.h": "c",
         "memoire.h": "c",
-        "save_instruction.h": "c"
+        "save_instruction.h": "c",
+        "execute.h": "c",
+        "math.h": "c"
     }
 }

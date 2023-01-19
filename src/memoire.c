@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../headers/memoire.h"
 
-void printMemory(memoire *m) {
+void printMemory(stored_memory *m) {
     if (m == NULL) {
         printf("Memoire vide\n");
     } else {
@@ -13,9 +13,9 @@ void printMemory(memoire *m) {
     }
 }
 
-int storeElement(memoire **m, int data, long adresse) {
-    memoire *nouveau = malloc(sizeof(*nouveau));
-    memoire *tmp = *m;
+int storeElement(stored_memory **m, int data, long adresse) {
+    stored_memory *nouveau = malloc(sizeof(*nouveau));
+    stored_memory *tmp = *m;
     if (nouveau == NULL) {
         return -1;
     }
@@ -35,8 +35,8 @@ int storeElement(memoire **m, int data, long adresse) {
 }
 
 //On renvoie 0 si l'adresse est trouvee, -1 sinon
-int loadElement(memoire **m, long adresse, int *resultat) {
-    memoire *tmp = *m;
+int loadElement(stored_memory **m, long adresse, long int *resultat) {
+    stored_memory *tmp = *m;
     while (tmp != NULL && tmp->adresse != adresse) {
         tmp = tmp->next;
     }
@@ -48,9 +48,9 @@ int loadElement(memoire **m, long adresse, int *resultat) {
     }
 }
 
-void clearMemory(memoire **m) {
-    memoire *tmp = *m;
-    memoire *tmp2 = NULL;
+void clearMemory(stored_memory **m) {
+    stored_memory *tmp = *m;
+    stored_memory *tmp2 = NULL;
     while (tmp != NULL) {
         tmp2 = tmp->next;
         free(tmp);
