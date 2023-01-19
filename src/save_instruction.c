@@ -32,29 +32,7 @@ void add_instruction(char* command, int arg1, int arg2, int arg3, stored_instruc
         new_instruction->arg3 = arg3;
         new_instruction->next = NULL;
         new_instruction->prev = suivant;
-    }
-
-    /*
-    stored_instruction *new_instruction = malloc(sizeof(stored_instruction));
-    //malloc de *stored_instruction, pas stored_instruction, à remplacer 
-    
-    new_instruction->command = command;
-    new_instruction->arg1 = arg1;
-    new_instruction->arg2 = arg2;
-    new_instruction->arg3 = arg3;
-    new_instruction->next = NULL;
-    new_instruction->prev = NULL;
-
-    if (current == NULL){
-        current = new_instruction;
-
-    }
-    else{
-        current->next = new_instruction;
-        new_instruction->prev = current;
-        current = new_instruction;
-    }
-    */
+    }    
 }
 
 void delete_instructions(stored_instruction* last_instruction){
@@ -74,7 +52,17 @@ void afficher_instructions(stored_instruction* last_instruction){
         printf("No instruction to display\n");
     }
     while (current != NULL){
-        printf("Stored_instruction :%s %d %d %d\n", current->command, current->arg1, current->arg2, current->arg3);
+        printf("Stored_instruction :%s", current->command);
+        if (current->arg1 != -32768){
+            printf(" %d", current->arg1);
+        }
+        if (current->arg2 != -32768){
+            printf(" %d", current->arg2);
+        }
+        if (current->arg3 != -32768){
+            printf(" %d", current->arg3);
+        }
+        printf("\n");
         current = current->next;
     }
 }

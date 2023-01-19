@@ -32,7 +32,7 @@ void pas_a_pas(char* file_programme) {
     define_registers(registre);
     while (fgets(instruction, TAILLE_MAX, programme) != NULL) {
         if (instruction[0] >= 65 && instruction[0] <= 90) {
-            printf("%s\n", instruction);
+            printf("Instruction rentrée : %s\n", instruction);
             //convert_hexa(instruction, instruction_hexa);
             //printf("%s\n", instruction_hexa);
 

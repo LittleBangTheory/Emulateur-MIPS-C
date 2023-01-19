@@ -40,6 +40,13 @@ void fill_instructions(char* instruction, stored_instruction** liste_instruction
 
     add_instruction(commande, args[0], args[1], args[2], liste_instruction);
 
+    //pour savoir si un argument a été modifié
+    for (int i=0; i<3; i++) {
+        args[i] = -32768;
+    }
+
+    //afficher_instructions(*liste_instruction);
+
     //Juste pour tester
     //execute(commande, &args[0], &args[1], &args[2], registre, memoire);
 }
