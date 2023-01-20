@@ -9,7 +9,15 @@
 #include "../headers/memoire.h"
 #include "../headers/save_instruction.h"
 
+/** \file execute.c 
+*   \brief Fichier contenant les fonctions d'exécution des instructions
+*/
 
+
+/** \fn void define_registers(long int* registre)
+*   \brief Fonction qui initialise tous les registres à 0
+*   \param registre Tableau de registres créé dans le fichier de mode
+*/
 void define_registers(long int* registre) {
     //on aurait pu créer une variable de type constant int pour le $0, mais par simplicité on utilisera directement registre[0]
     for (int i=0; i<NB_REGISTRE; i++) {
@@ -18,6 +26,14 @@ void define_registers(long int* registre) {
     }
 }
 
+/** \fn void get_args(char* instruction, char** commande, int* arg1, int* arg2, int* arg3)
+*   \brief Fonction qui récupère les arguments et la commande d'une instruction
+*   \param instruction Chaine de caractère contenant l'instruction à découper
+*   \param commande Pointeur sur la chaine de caractère contenant la commande
+*   \param arg1 Pointeur sur l'entier contenant le premier argument
+*   \param arg2 Pointeur sur l'entier contenant le deuxième argument
+*   \param arg3 Pointeur sur l'entier contenant le troisième argument
+*/
 void get_args(char* instruction, char** commande, int* arg1, int* arg2, int* arg3) {
     int args[3];
     int i = 0;
@@ -40,19 +56,32 @@ void get_args(char* instruction, char** commande, int* arg1, int* arg2, int* arg
     *arg2 = args[1];
     *arg3 = args[2];
 
-    //pour savoir si un argument a été modifié
+    //pour savoir si un argument a été modifié, par exemple pour ne pas afficher arg2 et arg3 pour une instruction J
     for (int i=0; i<3; i++) {
         args[i] = -32768;
     }
 }
 
-void execute(stored_instruction* instruction, long int* registre, stored_memory** memoire) {
-    char* command = malloc(sizeof(instruction->command));
-    strcpy(command, instruction->command);
-    int arg1 = instruction->arg1;
-    int arg2 = instruction->arg2;
-    int arg3 = instruction->arg3;
-    //disjonction de cas pour toutes les instructions
+
+/** \fn void execute(stored_instruction** instruction, long int* registre, stored_memory** memoire, FILE* sortie_affichage)
+*   \brief Fonction qui exécute une instruction passée en paramètre
+*   \param instruction Pointeur de pointeur sur l'instruction à exécuter
+*   \param registre Tableau de registres créé dans le fichier de mode
+*   \param memoire Pointeur de pointeur sur la mémoire créée dans le fichier de mode
+*   \param sortie_affichage Pointeur sur le fichier de sortie d'affichage
+*   Analyse l'élément de liste chainée passé en paramètre, récupère les arguments et la commande, puis exécute l'instruction
+*   Les instructions de type branch ou jump font appel respectivement aux fonctions void branch et void jump 
+*/
+void execute(stored_instruction** instruction, long int* registre, stored_memory** memoire, FILE* sortie_affichage) {
+    //Affichage de l'instruction
+    afficher_instruction_courrante(*instruction, sortie_affichage);
+
+    char* command = malloc(sizeof((*instruction)->command));
+    strcpy(command, (*instruction)->command);
+    int arg1 = (*instruction)->arg1;
+    int arg2 = (*instruction)->arg2;
+    int arg3 = (*instruction)->arg3;
+    //disjonction de cas pour toutes les (*instruction)s
     if (strcmp(command, "ADD") == 0) {
         registre[arg1] = registre[arg2] + registre[arg3];
     } else if (strcmp(command, "ADDI") == 0) {
@@ -62,20 +91,45 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     }
     //Branch 
     else if (strcmp(command, "BEQ") == 0) {
-        if (registre[arg1] == registre[arg2] && arg3 != 0) {
-            branch(instruction, arg3, registre, *memoire);
+        if (registre[arg1] == registre[arg2]) {
+            (*instruction) = (*instruction)->next;
+            execute(instruction, registre, memoire, sortie_affichage);
+            if (arg3 == 0){
+                execute(instruction, registre, memoire, sortie_affichage);
+            } else {
+                branch(instruction, arg3);
+            }
         }
     } else if (strcmp(command, "BLEZ") == 0) {
-        if (registre[arg1] <= 0 && arg2 != 0) {
-            branch(instruction, arg2, registre, *memoire);
+        if (registre[arg1] <= 0) {
+            (*instruction) = (*instruction)->next;
+            execute(instruction, registre, memoire, sortie_affichage);
+            if (arg2 == 0){
+                execute(instruction, registre, memoire, sortie_affichage);
+            } else {
+                branch(instruction, arg2);
+            }
     }
     } else if (strcmp(command, "BGTZ") == 0) {
-        if (registre[arg1] > 0 && arg2 != 0) {
-            branch(instruction, arg2, registre, *memoire);
+        if (registre[arg1] > 0) {
+            (*instruction) = (*instruction)->next;
+            execute(instruction, registre, memoire, sortie_affichage);
+            if (arg2 == 0){
+                execute(instruction, registre, memoire, sortie_affichage);
+            } else {
+                branch(instruction, arg2);
+            }
         }
     } else if (strcmp(command, "BNE") == 0) {
-        if (registre[arg1] != registre[arg2] && arg3 != 0) {
-            branch(instruction, arg3, registre, *memoire);
+        if (registre[arg1] != registre[arg2]) {
+            (*instruction) = (*instruction)->next;
+            execute(instruction, registre, memoire, sortie_affichage);
+            if (arg3 == 0){
+                execute(instruction, registre, memoire, sortie_affichage);
+            } else {
+                branch(instruction, arg3);
+            }
+            
         }
     } 
     //Div
@@ -85,19 +139,17 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     }
     //Jump
     else if(strcmp(command, "J") == 0){
-        instruction = instruction->next;
-        execute(instruction, registre, memoire);
+        (*instruction) = (*instruction)->next;
+        execute(instruction, registre, memoire, sortie_affichage);
         jump(instruction, arg1);
     } else if(strcmp(command, "JAL") == 0){
-        registre[31] = instruction->line_number;
-        instruction = instruction->next;
-        execute(instruction, registre, memoire);
+        (*instruction) = (*instruction)->next;
+        registre[ra] = ((*instruction)->next)->line_number;
+        execute(instruction, registre, memoire, sortie_affichage);
         jump(instruction, arg1);
-        execute(instruction, registre, memoire);
-        jump(instruction, registre[31]);
     } else if(strcmp(command, "JR") == 0){
-        instruction = instruction->next;
-        execute(instruction, registre, memoire);
+        (*instruction) = (*instruction)->next;
+        execute(instruction, registre, memoire, sortie_affichage);
         jump(instruction, registre[arg1]);
     }
     //Load 
@@ -117,11 +169,10 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
         if (registre[arg1]*registre[arg2] < 2147483647 && registre[arg1]*registre[arg2]> -2147483648) {
             /*registre[HI] = (((1 << 32) - 1) << 32 ) & (registre[arg1]*registre[arg2]);
             registre[LO] = ((1 << 32) - 1) & registre[arg1]*registre[arg2];*/
-            long int left_part=18446744069414584320;
+            unsigned long int left_part=18446744069414584320;
             //18446744069414584320 est 1 [63;32] puis 0 sur [31;0] en hexa
             long int right_part=4294967295;
             //4294967295 est 0 [63;32] puis 1 sur [31;0] en hexa
-            printf("Resultat : %ld\n", registre[arg1] * registre[arg2]);
             registre[HI] = ((registre[arg1] * registre[arg2]) & left_part) >> 32; 
             registre[LO] = ((registre[arg1] * registre[arg2]) & right_part);
         } else {
@@ -163,20 +214,33 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     //Exclusive OR
     else if(strcmp(command, "XOR") == 0){
         registre[arg1] = registre[arg2] ^ registre[arg3];
+    } else if (strcmp(command, "NOP") == 0) {
+        //On ne fait rien
     } else {
         printf("Erreur : commande inconnue\n");
     }
     free(command);
+
+    //Affichage des registres
+    afficherRegistres(registre, sortie_affichage);
 }
 
+/** \fn void afficherRegistres(long int* registre, FILE* sortie)
+*   \brief Affiche les registres modifiés
+*   \param registre Tableau des registres
+*   \param sortie Fichier de sortie
+*   Affiche les registres non nuls, et les registres HI et LO si au moins l'un des deux n'est pas nul
+*/
 void afficherRegistres(long int* registre, FILE* sortie) {
-    for (int i=0; i<NB_REGISTRE-2; i++) {
-        if (registre[i] != 0) {
-            fprintf(sortie, "$%d:%ld\n", i, registre[i]);
+    if (sortie != NULL) {
+        for (int i=0; i<NB_REGISTRE-2; i++) {
+            if (registre[i] != 0) {
+                fprintf(sortie, "$%d:%ld\n", i, registre[i]);
+            }
         }
-    }
-    if(registre[HI] != 0 || registre[LO] != 0) {
-        fprintf(sortie, "HI:%ld\n", registre[HI]);
-        fprintf(sortie, "LO:%ld\n", registre[LO]);
+        if(registre[HI] != 0 || registre[LO] != 0) {
+            fprintf(sortie, "HI:%ld\n", registre[HI]);
+            fprintf(sortie, "LO:%ld\n", registre[LO]);
+        }
     }
 }

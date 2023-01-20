@@ -38,11 +38,15 @@ void convert_hexa(char* instruction, char* instruction_hexa) {
     //Nettoyer la chaine
     clear_instruction(instruction, &adress_of_instruction_clean, &size_of_instruction_clean);
     char* instruction_clean = adress_of_instruction_clean;
-    //Encoder la chaine
-    encoder(instruction_clean, instruction_encodee);
-    
-    //Convertir le binaire en décimal
-    dec_val = binaryToInt(instruction_encodee);
+    if (strcmp(instruction_clean, "NOP")==0){
+        dec_val = 0;
+    } else {
+        //Encoder la chaine
+        encoder(instruction_clean, instruction_encodee);
+        
+        //Convertir le binaire en décimal
+        dec_val = binaryToInt(instruction_encodee);
+    }
 
     //Ecrire le résultat dans instruction_hexa sous forme hexadecimale
     sprintf(instruction_hexa, "%.8x\n", dec_val);

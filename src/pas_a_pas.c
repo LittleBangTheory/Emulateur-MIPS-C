@@ -7,10 +7,23 @@
 #include "../headers/get_from_instruction.h"
 #include "../headers/execute.h"
 
+/** \file pas_a_pas.c
+ *  \brief Fichier executant le mode pas à pas
+ */
 
+/** \fn void pas_a_pas(char* file_programme)
+ *  \brief Fonction executant le mode pas à pas
+ *  \param file_programme Le fichier contenant le programme à executer
+ *  La fonction initialise les registres, la mémoire et la liste des instructions, puis ouvre le fichier contenant le programme à executer. 
+ *  Elle lit ensuite le fichier ligne par ligne, convertit les instructions en hexadécimal, et les ajoute à la liste des instructions. 
+ *  Enfin, elle execute le programme en parcourant la liste chainée, en modifiant les registres et la mémoire, et en affichant l'instruction et l'état des registres à chaque étape.
+ *  Elle demande que l'utilisateur appuie sur entrée pour passer à l'étape suivante.
+ *  La fonction pour convertir en héxadécimal a été implémentée avant la création de la liste chainée contenant les instructions, elle n'est donc pas complatible avec ce nouveau mode d'exécution. C'est pourquoi les instructions en hexadécimal sont affichées avant l'execution. Nous ne l'avons pas modifié car nous ne sommes pas évalués la dessus pour ce rendu.
+ */
+ 
 void pas_a_pas(char* file_programme) {
     char instruction[TAILLE_MAX];
-    //char instruction_hexa[TAILLE_MAX];
+    char instruction_hexa[TAILLE_MAX];
     char enter;
 
     FILE* programme;
@@ -33,14 +46,18 @@ void pas_a_pas(char* file_programme) {
     long int registre[NB_REGISTRE];
     define_registers(registre);
 
+    char* instruction_clean;
+
     //Lecture du fichier, convertion et ajout des instructions dans la liste chainée
     while (fgets(instruction, TAILLE_MAX, programme) != NULL) {
         if (instruction[0] >= 65 && instruction[0] <= 90) {
+            //On enlève les commentaires
+            instruction_clean = strtok(instruction, "#");
             //printf("Instruction rentrée : %s\n", instruction);
-            //convert_hexa(instruction, instruction_hexa);
-            //printf("%s\n", instruction_hexa);
+            convert_hexa(instruction_clean, instruction_hexa);
+            printf("%s\n", instruction_hexa);
 
-            get_args(instruction, &commande, &arg1, &arg2, &arg3);
+            get_args(instruction_clean, &commande, &arg1, &arg2, &arg3);
             add_instruction(commande, arg1, arg2, arg3, line_number, &liste_instruction);
             line_number++;
         }
@@ -49,10 +66,8 @@ void pas_a_pas(char* file_programme) {
     //Execution du programme
     stored_instruction* current = liste_instruction;
     while (current != NULL){
-        afficher_instruction_courrante(current);
-        execute(current, registre, &memoire);
-
-        afficherRegistres(registre, stdout);
+        //afficher_instruction_courrante(current, stdout);
+        execute(&current, registre, &memoire, stdout);
 
         printf("Press enter to continue\n");
         enter = scanf("%c", &enter);

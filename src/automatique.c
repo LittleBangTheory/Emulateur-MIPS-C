@@ -1,11 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../headers/automatique.h"
 #include "../headers/read_and_convert.h"
 #include "../headers/memoire.h"
 #include "../headers/save_instruction.h"
 #include "../headers/execute.h"
 
+/** \file automatique.c
+ *  \brief Fichier executant le mode automatique
+ */
+
+/** \fn void automatique(char* file_programme, char* file_sortie_assemblage, char* file_sortie_execution)
+ *  \brief Fonction executant le mode pas à pas
+ *  \param file_programme Le fichier contenant le programme à executer
+ *  \param file_sortie_assemblage Le fichier dans lequel on écrit les instructions en hexadécimal
+ *  \param file_sortie_execution Le fichier dans lequel on écrit l'état final des registres
+ *  La fonction initialise les registres, la mémoire et la liste des instructions, puis ouvre le fichier contenant le programme à executer et les deux fichiers pour la sortie hexa et la sortie des registres. 
+ *  Elle lit ensuite le fichier ligne par ligne, convertit les instructions en hexadécimal, les ajoute à la liste des instructions. 
+ *  Enfin, elle execute le programme ligne par ligne en modifiant les registres et la mémoire, et les écrit dans le fichier sortie_execution.
+ */
 void automatique(char* file_programme, char* file_sortie_assemblage, char* file_sortie_execution) {
 
     char instruction[TAILLE_MAX];
@@ -34,14 +48,18 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
 
     char* commande = malloc(sizeof(char)*5);
     int arg1, arg2, arg3, line_number=0;
-    
+
+    char* instruction_clean;
+
     //Lecture du fichier, conversion et écriture dans le fichier de sortie, ajout des instructions dans la liste
     while (fgets(instruction, TAILLE_MAX, programme) != NULL) {
         if (instruction[0] >= 65 && instruction[0] <= 90) {
-            convert_hexa(instruction, instruction_hexa);
+            //On enlève les commentaires
+            instruction_clean = strtok(instruction, "#");
+            convert_hexa(instruction_clean, instruction_hexa);
             fprintf(sortie_assemblage, "%s\n", instruction_hexa);
 
-            get_args(instruction, &commande, &arg1, &arg2, &arg3);
+            get_args(instruction_clean, &commande, &arg1, &arg2, &arg3);
             add_instruction(commande, arg1, arg2, arg3, line_number, &liste_instruction);
             line_number++;
         }
@@ -50,11 +68,11 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
     //Execution du programme
     stored_instruction* current = liste_instruction;
     while (current != NULL){
-        execute(current, registre, &memoire);
+        execute(&current, registre, &memoire, NULL);
         current = current->next;
     }
 
-    afficherRegistres(registre, stdout);
+    afficherRegistres(registre, sortie_execution);
     
 
     fclose(programme);

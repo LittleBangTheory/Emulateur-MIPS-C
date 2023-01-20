@@ -52,8 +52,10 @@ void afficher_instructions(stored_instruction* last_instruction){
     }
 }
 
-void afficher_instruction_courrante(stored_instruction* current) {
-    printf("Stored_instruction :%s %d %d %d\n", current->command, current->arg1, current->arg2, current->arg3);
+void afficher_instruction_courrante(stored_instruction* current, FILE* sortie) {
+    if (sortie != NULL) {
+        fprintf(sortie, "%s %d %d %d\n", current->command, current->arg1, current->arg2, current->arg3);
+    }
 }
 
 void clear_instructions(stored_instruction **instruction) {
@@ -67,24 +69,22 @@ void clear_instructions(stored_instruction **instruction) {
     *instruction = NULL;
 }
 
-void branch(stored_instruction *current, int branch_value, long int* registre, stored_memory* memoire){
-    current = current->next;
-    execute(current, registre, &memoire);
+void branch(stored_instruction** current, int branch_value){
     int i = 0;
     if (branch_value < -1){  
-        while (i < branch_value-2 && current->next != NULL){
-            current = current->next;
-            i++;
-            if (current->next == NULL){
+        while (i > branch_value && (*current)->prev != NULL){
+            (*current) = (*current)->prev;
+            i--;
+            if ((*current)->prev == NULL){
                 printf("Error : branch value is too low\n");
                 exit(EXIT_FAILURE);
             }
         }
     } else if (branch_value > 1) {
-        while(i > branch_value && current->prev != NULL){
-            current = current->prev;
-            i--;
-            if (current->prev == NULL){
+        while(i < branch_value-1 && (*current)->next != NULL){
+            (*current) = (*current)->next;
+            i++;
+            if ((*current)->next == NULL){
                 printf("Error : branch value is too high\n");
                 exit(EXIT_FAILURE);
             }
@@ -92,19 +92,19 @@ void branch(stored_instruction *current, int branch_value, long int* registre, s
     }
 }
 
-void jump(stored_instruction* current, int line_number){
-    if (line_number > current->line_number){  
-        while (line_number > current->line_number && current->next != NULL){
-            current = current->next;
-            if (current->next == NULL){
+void jump(stored_instruction** current, int line_number){
+    if (line_number > (*current)->line_number){ 
+        while (line_number > ((*current)->line_number)+1 && (*current)->next != NULL){
+            (*current) = (*current)->next;
+            if ((*current)->next == NULL){
                 printf("Error : branch value is too high\n");
                 exit(EXIT_FAILURE);
             }
         }
     } else {
-        while(line_number < current->line_number && current->prev != NULL){
-            current = current->prev;
-            if (current->prev == NULL){
+        while(line_number < ((*current)->line_number)-1 && (*current)->prev != NULL){
+            (*current) = (*current)->prev;
+            if ((*current)->prev == NULL){
                 printf("Error : branch value is too low\n");
                 exit(EXIT_FAILURE);
             }

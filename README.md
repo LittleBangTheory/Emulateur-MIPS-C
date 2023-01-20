@@ -110,7 +110,7 @@ L'organisation en module permet de séparer les différentes fonctionnalités de
 modifications ont été nécessaires ? Rétrospectivement, est-ce que cette
 structure était bien prévue ?
 
-[COMPLÉTER ICI]
+Nous avons du implémenter une liste chainée pour 
 
 * Avez-vous compris le fonctionnement de chaque instruction à partir de la
 documentation fournie ? Si non, quels sont les points obscurs ?
