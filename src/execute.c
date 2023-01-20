@@ -114,10 +114,19 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     } 
     //Mult
     else if(strcmp(command, "MULT") == 0){
-        registre[HI] = ((registre[arg1] * registre[arg2]) & 18446744069414584320) >> 32; 
-        //18446744069414584320 est 1 [63;32] puis 0 sur [31;0] en hexa
-        registre[LO] = ((registre[arg1] * registre[arg2]) & 4294967295);
-        //4294967295 est 0 [63;32] puis 1 sur [31;0] en hexa
+        if (registre[arg1]*registre[arg2] < 2147483647 && registre[arg1]*registre[arg2]> -2147483648) {
+            /*registre[HI] = (((1 << 32) - 1) << 32 ) & (registre[arg1]*registre[arg2]);
+            registre[LO] = ((1 << 32) - 1) & registre[arg1]*registre[arg2];*/
+            long int left_part=18446744069414584320;
+            //18446744069414584320 est 1 [63;32] puis 0 sur [31;0] en hexa
+            long int right_part=4294967295;
+            //4294967295 est 0 [63;32] puis 1 sur [31;0] en hexa
+            printf("Resultat : %ld\n", registre[arg1] * registre[arg2]);
+            registre[HI] = ((registre[arg1] * registre[arg2]) & left_part) >> 32; 
+            registre[LO] = ((registre[arg1] * registre[arg2]) & right_part);
+        } else {
+            printf("Overflow, on ignore le résultat\n");
+        }
     } 
     //Or
     else if(strcmp(command, "OR") == 0){
@@ -125,19 +134,23 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     } 
     //Rotate
     else if(strcmp(command, "ROTR") == 0){
-        registre[arg1] = (registre[arg2] >> arg3) | (registre[arg2] << (32 - arg3));
+        unsigned arg2tmp = (unsigned long int)registre[arg2];
+        unsigned arg3tmp = (unsigned long int)arg3;
+        registre[arg1] = (arg2tmp >> arg3tmp) | (arg2tmp << (32 - arg3tmp));
     }
     //Shift 
     else if(strcmp(command, "SLL") == 0){
         registre[arg1] = registre[arg2] << arg3;    
-    } else if(strcmp(command, "SLT") == 0){
+    } else if(strcmp(command, "SRL") == 0){
+        registre[arg1] = registre[arg2] >> arg3;
+    }  
+    //Set on less than
+    else if(strcmp(command, "SLT") == 0){
         if (registre[arg2] < registre[arg3]) {
             registre[arg1] = 1;
         } else {
             registre[arg1] = 0;
         }
-    } else if(strcmp(command, "SRL") == 0){
-        registre[arg1] = registre[arg2] >> arg3;
     } 
     //Sub
     else if(strcmp(command, "SUB") == 0){
@@ -146,7 +159,6 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     //Store
     else if(strcmp(command, "SW") == 0){
         storeElement(memoire, registre[arg1], registre[arg3] + arg2);
-        //printMemory(memoire);
     } 
     //Exclusive OR
     else if(strcmp(command, "XOR") == 0){
@@ -154,14 +166,17 @@ void execute(stored_instruction* instruction, long int* registre, stored_memory*
     } else {
         printf("Erreur : commande inconnue\n");
     }
+    free(command);
 }
 
-void afficherRegistres(long int* registre) {
+void afficherRegistres(long int* registre, FILE* sortie) {
     for (int i=0; i<NB_REGISTRE-2; i++) {
         if (registre[i] != 0) {
-            printf("$%d:%ld\n", i, registre[i]);
+            fprintf(sortie, "$%d:%ld\n", i, registre[i]);
         }
     }
-    printf("HI:%ld\n", registre[HI]);
-    printf("LO:%ld\n", registre[LO]);
+    if(registre[HI] != 0 || registre[LO] != 0) {
+        fprintf(sortie, "HI:%ld\n", registre[HI]);
+        fprintf(sortie, "LO:%ld\n", registre[LO]);
+    }
 }

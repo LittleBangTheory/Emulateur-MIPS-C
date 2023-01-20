@@ -33,7 +33,7 @@ void pas_a_pas(char* file_programme) {
     long int registre[NB_REGISTRE];
     define_registers(registre);
 
-    //Lecture du fichier
+    //Lecture du fichier, convertion et ajout des instructions dans la liste chainée
     while (fgets(instruction, TAILLE_MAX, programme) != NULL) {
         if (instruction[0] >= 65 && instruction[0] <= 90) {
             //printf("Instruction rentrée : %s\n", instruction);
@@ -52,7 +52,7 @@ void pas_a_pas(char* file_programme) {
         afficher_instruction_courrante(current);
         execute(current, registre, &memoire);
 
-        afficherRegistres(registre);
+        afficherRegistres(registre, stdout);
 
         printf("Press enter to continue\n");
         enter = scanf("%c", &enter);

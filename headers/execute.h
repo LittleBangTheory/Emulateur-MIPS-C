@@ -12,6 +12,6 @@
 void define_registers(long int*);
 void get_args(char*, char**, int*, int*, int*);
 void execute(stored_instruction* instruction, long int* registre, stored_memory** memoire);
-void afficherRegistres(long int* registre);
+void afficherRegistres(long int* registre, FILE* sortie);
 
 #endif

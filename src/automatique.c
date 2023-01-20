@@ -36,24 +36,25 @@ void automatique(char* file_programme, char* file_sortie_assemblage, char* file_
     int arg1, arg2, arg3, line_number=0;
     
     //Lecture du fichier, conversion et écriture dans le fichier de sortie, ajout des instructions dans la liste
-    while (fgets(instruction, TAILLE_MAX, programme)[0] != '\n') {  
-        convert_hexa(instruction, instruction_hexa);
-        fprintf(sortie_assemblage, "%s\n", instruction_hexa);
+    while (fgets(instruction, TAILLE_MAX, programme) != NULL) {
+        if (instruction[0] >= 65 && instruction[0] <= 90) {
+            convert_hexa(instruction, instruction_hexa);
+            fprintf(sortie_assemblage, "%s\n", instruction_hexa);
 
-        get_args(instruction, &commande, &arg1, &arg2, &arg3);
-        add_instruction(commande, arg1, arg2, arg3, line_number, &liste_instruction);
-        line_number++;
+            get_args(instruction, &commande, &arg1, &arg2, &arg3);
+            add_instruction(commande, arg1, arg2, arg3, line_number, &liste_instruction);
+            line_number++;
+        }
     }
 
     //Execution du programme
     stored_instruction* current = liste_instruction;
     while (current != NULL){
-        //afficher_instruction_courrante(current);
         execute(current, registre, &memoire);
         current = current->next;
     }
 
-    afficherRegistres(registre);
+    afficherRegistres(registre, stdout);
     
 
     fclose(programme);

@@ -55,7 +55,9 @@ void interactif() {
         if (current->next != NULL) {
             current = current->next;
         }        
-        printMemory(memoire);
+        
+        //Affichage des registres
+        afficherRegistres(registre, stdout);
 
         //Lecture de la prochaine instruction
         printf("Entrez une instruction: ");

@@ -149,8 +149,11 @@ int getIArgs(char* instruction, int arg) {
     }
 
     //Opérandes non valides
-    if (((arg==RT || arg==RS) && (res>31 || res<0)) || (arg==IMMEDIATE && res>65535)) {
+    if (((arg==RT || arg==RS) && (res>31 || res<0))){
         printf("Valeur des opérandes non valide\n");
+        exit(EXIT_FAILURE);
+    } else if (arg==IMMEDIATE && (res>32767 || res<-32768)) {
+        printf("Dépassement de la valeur des opérandes !\n Valeur maximale : 32767\n Valeur minimale : -32768\n Arrêt du programme\n");
         exit(EXIT_FAILURE);
     }
 
