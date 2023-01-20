@@ -6,6 +6,16 @@
 #include "../headers/read_and_convert.h"
 #include "../headers/get_from_instruction.h"
 
+/** \file read_and_convert.c
+ *  \brief Fichier contenant les fonctions de lecture et de conversion des instructions. 
+*/
+
+/** \fn void clear_instruction(char* instruction, char** adresse, int* size)
+ *  \brief Fonction qui enlève les espaces, les retours à la ligne et les commentaires d'une instruction
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \param adresse Adresse de la chaine de caractère contenant l'instruction nettoyée
+ *  \param size Taille de la chaine de caractère contenant l'instruction nettoyée
+*/
 void clear_instruction(char* instruction, char** adresse, int* size) {
     //taille de la chaine
     *size=strlen(instruction);
@@ -29,6 +39,11 @@ void clear_instruction(char* instruction, char** adresse, int* size) {
     *adresse = instruction_clean;
 }
 
+/** \fn void convert_hexa(char* instruction, char* instruction_hexa)
+ *  \brief Fonction qui convertit une instruction en hexadécimal
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \param instruction_hexa Chaine de caractère contenant l'instruction en hexadécimal
+*/
 void convert_hexa(char* instruction, char* instruction_hexa) {
     //Initialisation des variables
     int dec_val=0, size_of_instruction_clean;
@@ -55,6 +70,12 @@ void convert_hexa(char* instruction, char* instruction_hexa) {
     free(instruction_clean);
 }
 
+/** \fn void convert_binaire(int valeur, int nb_bits, char* valeur_binaire)
+ *  \brief Fonction qui convertit une valeur en binaire
+ *  \param valeur Valeur à convertir
+ *  \param nb_bits Nombre de bits de la valeur
+ *  \param valeur_binaire Chaine de caractère contenant la valeur en binaire * 
+*/
 void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
 
     int binaryNum[32];
@@ -104,6 +125,12 @@ void convert_binaire(int valeur, int nb_bits, char* valeur_binaire) {
     }
 }
 
+/** \fn void encoder(char* instruction, char* instruction_encodee)
+ *  \brief Fonction qui encode une instruction en binaire
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \param instruction_encodee Chaine de caractère contenant l'instruction encodée en binaire
+ *  Cette fonction fait appel aux fonctions pour récupérer les différents champs de l'instruction, et les convertir en binaire.
+*/
 void encoder(char* instruction, char* instruction_encodee) {
 
     char commande[TAILLE_MAX];
@@ -250,6 +277,11 @@ void encoder(char* instruction, char* instruction_encodee) {
     }
 }
 
+/** \fn int binaryToInt(char* binary)
+ *  \brief Convertit un nombre binaire en nombre décimal
+ *  \param binary Le nombre binaire à convertir
+ *  \return Le nombre décimal
+*/
 int binaryToInt(char* binary) {
     int i = 0;
     int result = 0;

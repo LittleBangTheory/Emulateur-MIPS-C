@@ -1,3 +1,32 @@
+/** \file get_from_instruction.h
+ *  \brief Fichier contenant les prototypes des fonctions de get_from_instruction.c 
+*/
+
+/** \def TAILLE_MAX
+ *  \brief Définition de la taille maximale d'une instruction
+ *  \def NB_TYPE_I
+ *  \brief Définition du nombre de types d'instructions I
+ *  \def NB_TYPE_J
+ *  \brief Définition du nombre de types d'instructions J
+ *  \def NB_TYPE_R
+ *  \brief Définition du nombre de types d'instructions R
+ *  \def TYPE_I
+ *  \brief Définition du numéro de type d'instruction I
+ *  \def TYPE_J
+ *  \brief Définition du numéro de type d'instruction J
+ *  \def TYPE_R
+ *  \brief Définition du numéro de type d'instruction R
+ *  \def RT
+ *  \brief Définition de l'argument RT
+ *  \def RS
+ *  \brief Définition de l'argument RS
+ *  \def IMMEDIATE
+ *  \brief Définition de l'argument IMMEDIATE
+ *  \def RD
+ *  \brief Définition de l'argument RD
+ *  \def SA
+ *  \brief Définition de l'argument SA
+*/
 #define TAILLE_MAX 100
 #define NB_TYPE_I 8
 #define NB_TYPE_J 2

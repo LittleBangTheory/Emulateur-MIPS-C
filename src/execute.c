@@ -40,7 +40,7 @@ void get_args(char* instruction, char** commande, int* arg1, int* arg2, int* arg
 
     const char* separators = " ,()$\n";
     char* token = strtok(instruction, separators);
-    while (token != NULL) {
+    while (token != NULL && i<4) {
         if (i == 0) {
             //on récupère la commande
             strcpy(*commande, token);

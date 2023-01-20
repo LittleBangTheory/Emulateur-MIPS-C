@@ -110,40 +110,41 @@ L'organisation en module permet de séparer les différentes fonctionnalités de
 modifications ont été nécessaires ? Rétrospectivement, est-ce que cette
 structure était bien prévue ?
 
-Nous avons du implémenter une liste chainée pour 
+Nous avons du implémenter une liste chainée pour stocker les instructions, nous n'en n'avions pas eu besoin au rendu 3. La structure des fonctions correspondait bien à la manière dont nous nous sommes finalement organisés.
 
 * Avez-vous compris le fonctionnement de chaque instruction à partir de la
 documentation fournie ? Si non, quels sont les points obscurs ?
 
-[COMPLÉTER ICI]
+La documentation était parfois un peu floue sur certaines instructions, mais nous avons pu comprendre le fonctionnement de chaque instruction avec un peu d'aide.
 
 * Quels exemples de programmes avez-vous choisi pour tester le calcul ? Les
 comparaisons et sauts ? La mémoire ?
 
-[COMPLÉTER ICI]
+Nous avons utilisé nos propres fichiers tests, ainsi que ceux fournis par le sujet, et au cours des différents rendus.
 
 * Le sujet spécifie-t-il tous les détails nécessaires pour bien implémenter la
 mémoire ? Quels choix avec-vous faits ?
 
-[COMPLÉTER ICI]
+Nous avons fait le choix d'implémenter une liste chaînée, mais il aurait probablement été possible de le faire avec un tableau, en sacrifiant une part de flexibilité.
 
 * Reste-t-il des bugs que vous avez découverts et pas corrigés ?
 
-[COMPLÉTER ICI]
+L'instruction MULT n'est probablement pas bien implémentée, il semble que pour les résultats qui occupent plus de 32 bits, il y ait des décalages. Les overflow provoquent des comportement innatendus dans le code, ils modifient des sorties qui ne devraient pas l'être.
 
 * D'autres remarques sur votre programme ?
 
-[COMPLÉTER ICI]
+Nous avons trouvé certaines consignes peu claires au lancement du projet, et nous nous lancions pour la première fois dans un projet de cette envergure. A cause de ces deux éléments, nous jugeons avoir fourni un programme fonctionnel, mais qui aurait mérité d'être plus optimisé et mieux organisé dans son architecture. 
 
 * Cochez (en remplaçant `[ ]` par `[x]`) si vous avez :**
-  - [ ] Implémenté l'émulation de toutes les instructions gérées par le rendu 2.
-  - [ ] Implémenté l'émulation de toutes les instructions.
-  - [ ] Tous vos tests qui passent.
-  - [ ] Vérifié que vous tests couvrent toutes les instructions émulées.
-  - [ ] Testé les cas particuliers : valeurs négatives, overflows...
-  - [ ] Testé les cas d'erreur : division par zéro, sauts invalides...
-  - [ ] Un port fonctionnel de DOOM pour votre émulateur.
+  - [x] Implémenté l'émulation de toutes les instructions gérées par le rendu 2.
+  - [x] Implémenté l'émulation de toutes les instructions.
+  - [x] Tous vos tests qui passent.
+  - [x] Vérifié que vous tests couvrent toutes les instructions émulées.
+  - [x] Testé les cas particuliers : valeurs négatives, overflows...
+  - [x] Testé les cas d'erreur : division par zéro, sauts invalides...
+  - [x] Un port fonctionnel de DOOM pour votre émulateur.
 
 * Des retours sur le projet en général ?
 
-[COMPLÉTER ICI]
+C'est le projet de C le plus poussé que nous avons eu à mener jusqu'à présent. Il nous a permis de comprendre mieux le fonctionnement du langage C et de ses outils, ainsi que de nous faciliter la compréhension du RISCV pour notre examen. Nous n'avons plus de mal à utiliser les fichiers, les listes chaînées, etc. Et nous avons aussi appris grâce à ce projet le fonctionnement de GDB, Valgrind, et Doxygen. 
+Vous trouverez d'ailleurs une documentation Doxygen dans le dossier racine.

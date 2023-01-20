@@ -5,8 +5,16 @@
 #include <math.h>
 #include "../headers/get_from_instruction.h"
 
+/** \file get_from_instruction.c
+ *  \brief Fichier contenant les fonctions de récupération des informations des instructions
+*/
 
-
+/** \fn int getType(char* instruction)
+ *  \brief Fonction qui détermine le type d'une instruction
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \return Entier contenant le type de l'instruction
+ *  La fonction compare la commande avec 3 listes contenant les trois types d'instructions. Elle renvoie le type de l'instruction sous forme d'un entier.
+*/
 int getType(char* instruction) {
     int type;
     char commande[TAILLE_MAX];
@@ -42,7 +50,12 @@ int getType(char* instruction) {
     return type;
 }
 
-
+/** \fn void getOpCode(char* instruction, char* opcode)
+ *  \brief Fonction qui détermine l'opcode d'une instruction
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \param opcode Chaine de caractère contenant l'opcode, à remplir
+ *  La fonction compare la commande avec une liste contenant les opcodes. Elle renvoie l'opcode de l'instruction sous forme d'une chaine de caractère.
+*/
 void getOpCode(char* instruction, char* opcode) {
 
     char commande[TAILLE_MAX];
@@ -83,7 +96,12 @@ void getOpCode(char* instruction, char* opcode) {
 
 }
 
-
+/** \fn int getIArgs(char* instruction, int arg)
+ *  \brief Fonction qui détermine les arguments d'une instruction de type I
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \param arg Entier indiquant quel argument on veut récupérer (RT, RS ou IMMEDIATE)
+ *  \return L'argument demandé, sous forme d'un entier
+*/
 int getIArgs(char* instruction, int arg) {
 
     int i=0, res=0, tmp, parenthese=0;
@@ -160,7 +178,11 @@ int getIArgs(char* instruction, int arg) {
     return res;
 }
 
-
+/** \fn int getJArgs(char* instruction)
+ *  \brief Fonction qui détermine les arguments d'une instruction de type J
+ *  \param instruction Chaine de caractère contenant l'instruction 
+ *  \return L'argument demandé, sous forme d'un entier
+*/
 int getJArgs(char* instruction) {
 
     int target=0, res=0;
@@ -185,7 +207,12 @@ int getJArgs(char* instruction) {
     return res;
 }
 
-
+/** \fn int getRArgs(char* instruction, int arg)
+ *  \brief Fonction qui détermine les arguments d'une instruction de type R
+ *  \param instruction Chaine de caractère contenant l'instruction
+ *  \param arg Argument à récupérer (RD, RS, RT ou SA)
+ *  \return L'argument demandé, sous forme d'un entier
+*/
 int getRArgs(char* instruction, int arg) {
     int i=0, res=0, tmp;
     switch (arg) {
