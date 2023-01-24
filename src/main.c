@@ -1,5 +1,4 @@
 // Projet MIPS 2022-2023
-// Auteurs: Lafage_Chognot
 
 #include <stdio.h>
 #include <stdlib.h>

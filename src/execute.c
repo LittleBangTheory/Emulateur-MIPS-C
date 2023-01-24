@@ -134,8 +134,13 @@ void execute(stored_instruction** instruction, long int* registre, stored_memory
     } 
     //Div
     else if(strcmp(command, "DIV") == 0){
-        registre[HI]=registre[arg1]/registre[arg2];
-        registre[LO]=registre[arg1]%registre[arg2];
+        if (registre[arg2] == 0){
+            printf("Erreur : division par 0\n");
+            exit(EXIT_FAILURE);
+        } else {
+            registre[HI]=registre[arg1]/registre[arg2];
+            registre[LO]=registre[arg1]%registre[arg2];
+        }
     }
     //Jump
     else if(strcmp(command, "J") == 0){
