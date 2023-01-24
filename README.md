@@ -1,5 +1,9 @@
 Projet 2022-2023 : Émulateur MIPS
 
+Tests du code source : `make tests` 
+Archivage en .tgz : `make tar`
+Possibilité de générer une documentation Doxygen via le Doxyfile
+
 Analyse de texte (dont lecture des opérandes entières) :
 Lecture ligne par ligne + écriture fonctions pourrécupérer les informations contenues dans l'instrucion (type, opcode, opérandes). 
 - Type : 3 tableaux, contenant les instructions de type R, I et J. 
