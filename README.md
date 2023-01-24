@@ -75,3 +75,5 @@ Fonctions des modules :
 - Le module d'execution des instructions, qui contient notamment :
     `get_args` qui permet de récupérer la commande et les opérandes de l'instruction en appelant les fonctions du module de lecture et de conversion.
     `execute` qui permet d'executer l'instruction selon la commande et les opérandes récupérées.
+    
+ Possibilité de générer une documentation Doxygen via le Doxyfile
